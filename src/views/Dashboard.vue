@@ -1,8 +1,13 @@
 <template>
   <div id="dashboard">
     
-    <LoadingSpinner :successicon="false" :loadingon="loadingOn" />
-    <PopUpExpired :popupon="popUpExpiredOn" @do-redirect="redirectToLogin()" />
+    <LoadingSpinner 
+      :successicon="false" 
+      :loadingon="loadingOn" />
+    <PopUpExpired
+      v-if="popUpExpiredOn"
+      :popupon="popUpExpiredOn" 
+      @do-redirect="redirectToLogin()" />
 
     <div 
       class="relative z-10 container opacity-0" 
@@ -28,7 +33,7 @@ export default {
   data(){
     return{
       loadingOn : false,
-      popUpExpiredOn : false
+      popUpExpiredOn : false,
     }
   },
   props:['apiurl'],
@@ -61,8 +66,8 @@ export default {
             })
             .then((response) => {
               if(response.status == 200){
-                console.log(response.data);
                 this.loadingOn = false;
+                console.log(response.data);
               }
             })
             .catch((error) => {
@@ -70,23 +75,16 @@ export default {
                   this.loadingOn = false;
                   setTimeout(() => {
                     this.popUpExpiredOn = true;
-                  }, 500);
+                  }, 600);
                 }
             })
         }
-      },
-      redirectToLogin(){
-        this.popUpExpiredOn = false;
-        setTimeout(() => {
-          localStorage.removeItem('userdata');
-          this.$router.push({name: 'Login'});
-        }, 500);
       },
   },
   mounted(){
       setTimeout(() => {
         this.doUserAuth();
-      }, 700);
+      }, 600);
   },
 }
 </script>

@@ -1,7 +1,10 @@
 <template>
     <div id="login" class="w-full min-h-screen block md:flex overflow-auto">
 
-        <LoadingSpinner :successicon="successIcon" :loadingon="loadingOn" />
+        <LoadingSpinner
+          :msg="loadingMsg" 
+          :successicon="successIcon" 
+          :loadingon="loadingOn" />
         
         <!-- API ilustration -->
         <div id="apiIlustration" class="relative z-10 min-h-screen md:min-h-full w-full md:w-3/5 flex flex-col justify-center items-center pr-10 sm:pr-20 md:pr-20 pl-10 sm:pl-20 lg:pr-20 lg:pl-20 text-center">
@@ -36,6 +39,7 @@ export default {
             },
             loadingOn   : false,
             successIcon : false,
+            loadingMsg  : 'please wait',
         }
     },
     props:['apiurl'],
@@ -69,12 +73,13 @@ export default {
                     .then((response) => {
                         if(response.data.message == 'user register is success!'){
                             this.successIcon = true;
+                            this.loadingMsg  = 'check your email!'
                             setTimeout(() => {
                                 this.loadingOn = false;
                                 setTimeout(() => {
                                     this.$router.push({name:'Login'})
-                                }, 1000);
-                            }, 1500);
+                                }, 500);
+                            }, 3000);
                         }
                     })
                     .catch((error) => {
