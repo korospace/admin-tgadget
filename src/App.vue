@@ -1,5 +1,7 @@
 <template>
-  <div id="app" class="bg-gradient-to-t from-white to-tgadgety-500 w-screen h-screen overflow-x-hidden">
+  <div 
+    id="app" 
+    class="bg-gradient-to-t from-white to-tgadgety-500 w-screen h-screen overflow-x-hidden overflow-y-auto">
     <transition :name="titleCheck()">
       <router-view :apiurl="apiUrl"/>
     </transition>
@@ -16,6 +18,7 @@ export default {
   methods: {
     titleCheck(){
       let currentTitlePage = document.title.split('|');
+      
       if(/login|sign up/g.test(currentTitlePage[1])){
         return 'slide-fade';
       }
@@ -28,10 +31,19 @@ export default {
 </script>
 
 <style>
+  body{
+    overflow: hidden;
+  }
+  
   @font-face {
     font-family: "Rc-bold";
     src: local("Rc-bold"),
          url(./assets/fonts/RobotoCondensed-Bold.ttf) format("truetype");
+  }
+  @font-face {
+    font-family: "Quicksand-Regular";
+    src: local("Quicksand-Regular"),
+         url(./assets/fonts/Quicksand-Regular.ttf) format("truetype");
   }
   @font-face {
     font-family: "Quicksand-Medium";

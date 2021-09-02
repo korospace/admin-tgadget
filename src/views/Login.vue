@@ -1,22 +1,40 @@
 <template>
     <div
       id="login"
-      class="w-full min-h-screen block md:flex overflow-auto">
+      class="w-screen min-h-screen block md:flex overflow-x-hidden overflow-y-auto">
+
+        <Alert
+          v-if="alertOn"
+          :msg="alertMsg"
+          :type="alertType"
+          @closealert="alertOn=false" />
 
         <LoadingSpinner
+          v-if="loadingOn"
           msg="please wait"
-          :successicon="false" 
-          :loadingon="loadingOn" />
+          :successicon="false" />
         
         <!-- API ilustration -->
-        <div id="apiIlustration" class="relative z-10 min-h-screen md:min-h-full w-full md:w-3/5 flex flex-col justify-center items-center pr-10 sm:pr-20 md:pr-20 pl-10 sm:pl-20 lg:pr-20 lg:pl-20 text-center">
+        <div
+          id="apiIlustration"
+          class="h-screen w-full md:w-3/5 flex flex-col justify-center items-center pr-10 sm:pr-20 pl-10 sm:pl-20 text-center">
             <img :src="apiIlustration" class="w-full">
-            <h1 class="uppercase mt-2 opacity-80">t-gadgetapi client page</h1>
-            <a href="#" v-scroll-to="'#formWraper'" class="bg-tgadgety md:hidden mt-10 px-5 py-1.5 rounded-sm box-border shadow-md uppercase tracking-widest text-white sm:hover:bg-tgadgety-500 active:bg-tgadgety-500 border-2 border-tgadgety">login</a>
+            <h1 class="uppercase mt-2 opacity-80">
+                t-gadgetapi client page
+            </h1>
+            <a 
+              href="#"  
+              v-scroll-to="{
+                el: '#formWraper',
+                container: '#login',
+              }"
+              class="bg-tgadgety sm:hover:bg-tgadgety-500 active:bg-tgadgety-500 inline-block md:hidden mt-10 px-5 py-1.5 box-border rounded-sm shadow-md uppercase tracking-widest text-white transition-all">login</a>
         </div>
 
         <!-- Login form -->
-        <div id="formWraper" class="relative min-h-screen md:min-h-full flex-1 pl-5 md:pl-10 pr-5 md:pr-10 lg:pr-20 py-14 box-border overflow-hidden">
+        <div 
+          id="formWraper" 
+          class="min-h-screen md:flex-1 pl-5 md:pl-10 pr-5 md:pr-10 lg:pr-20 py-5 md:py-14 box-border">
             <FormLoginRegister 
               formtype="formLogin"
               :validation="formValidation"
@@ -27,52 +45,77 @@
 </template>
 
 <script>
+import Alert             from '../components/Alert'
+import LoadingSpinner    from '../components/LoadingSpinner'
 import FormLoginRegister from '../components/FormLoginRegister'
-import LoadingSpinner from '../components/LoadingSpinner'
 
 export default {
+    props:['apiurl'],
+    components: {
+        Alert,
+        LoadingSpinner,
+        FormLoginRegister,
+    },
     data(){
         return{
-            apiIlustration: require('@/assets/img/api-ilustration.webp'),
+            alertOn        : false,
+            alertMsg       : '',
+            alertType      : '',
+            loadingOn      : false,
+            apiIlustration : require('@/assets/img/api-ilustration.webp'),
             formValidation : {
                 username : '',
                 password : '',
             },
-            loadingOn : false
         }
     },
-    props:['apiurl'],
-    components: {
-        FormLoginRegister,
-        LoadingSpinner,
+    beforeRouteEnter(to, from, next) {
+        if (localStorage.getItem('userdata') !== null) {
+            next({name: "Dashboard"});
+        }
+        next();
     },
     methods: {
         formOnSubmit(form){
+            let invalid    = false;
             let formLogin  = new FormData(form);
             this.formValidation.username = '';
             this.formValidation.password = '';
 
             if(formLogin.get('username') == ''){
+                invalid = true;
                 this.formValidation.username = 'username is required';
             }
             if(formLogin.get('password') == ''){
+                invalid = true;
                 this.formValidation.password = 'password is required';
             }
 
-            if(formLogin.get('username') != '' && formLogin.get('password') != ''){
+            if(!invalid){
                 this.loadingOn = true;
 
                 this.axios
                 .post(`${this.$props.apiurl}/user/login`,formLogin)
                 .then((response) => {
                     this.loadingOn = false;
+                    response.data.data.username = formLogin.get('username');
+                    response.data.data.password = formLogin.get('password');
                     localStorage.setItem('userdata',JSON.stringify(response.data.data));
-                    this.$router.push({name:'Dashboard'})
+
+                    setTimeout(() => {
+                        this.$router.push({name:'Dashboard'})
+                    }, 800);
                 })
                 .catch((error) => {
+                    this.loadingOn = false;
+                    
                     if(error.response.status == 401){
                         let message = error.response.data.message;
 
+                        if(message == 'email not verified'){
+                            this.alertType = 'info';
+                            this.alertMsg  = `<b>e-mail not verified</b>. please check your email`
+                        }
                         if(/username/g.test(message)){
                             this.formValidation.username = message;
                         }
@@ -80,13 +123,15 @@ export default {
                             this.formValidation.password = message;
                         }
                     }
-                    this.loadingOn = false;
+                    if(error.response.status == 500){
+                        this.alertType = 'danger';
+                        this.alertMsg  = '<b>Ups, server error</b>. Please try again!';
+                        this.alertOn   = true;
+                    }
                 })
             }
         }
     },
-    mounted(){
-    }
 }
 </script>
 
