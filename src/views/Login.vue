@@ -26,7 +26,7 @@
               href="#"  
               v-scroll-to="{
                 el: '#formWraper',
-                container: '#login',
+                container: '#app',
               }"
               class="bg-tgadgety sm:hover:bg-tgadgety-500 active:bg-tgadgety-500 inline-block md:hidden mt-10 px-5 py-1.5 box-border rounded-sm shadow-md uppercase tracking-widest text-white transition-all">login</a>
         </div>

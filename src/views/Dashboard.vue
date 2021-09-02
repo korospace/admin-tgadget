@@ -1,5 +1,5 @@
 <template>
-  <div id="dashboard" class="w-screen h-screen" :class="{'bg-tgadgety-500':loadingOn==false}">
+  <div id="dashboard" class="w-screen h-screen" :class="{'bg-white':true,'bg-tgadgety-500':loadingOn==false}">
 
     <Alert
       v-if="alertOn"
