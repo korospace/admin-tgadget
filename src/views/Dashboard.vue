@@ -40,24 +40,19 @@
           @change-username="userName=$event"
           @settings-off="showSettings(false)" />
         
-        <main class="bg-white relative z-10 flex-1 overflow-auto">
+        <main class="bg-white relative z-10 flex-1 pb-20 sm:pb-5 overflow-auto">
           
           <DashboardHeader :username="userName" />
 
-          <div id="statistics" class="w-full h-screen">
-            <DashboardVisitors
-              :apiurl="apiurl"
-              @change-alerttype="alertType = $event"
-              @change-alertmsg="alertMsg = $event"
-              @alerton="alertOn=true"
-              @expiredon="popUpExpiredOn=true" />
-          </div>
-          <div id="products" class="w-full h-screen">
-            prdoduk
-          </div>
-          <div id="banner" class="w-full h-screen">
-            banner
-          </div>
+          <DashboardVisitors
+            :apiurl="apiurl"
+            @change-alerttype="alertType = $event"
+            @change-alertmsg="alertMsg = $event"
+            @alerton="alertOn=true"
+            @expiredon="popUpExpiredOn=true" />
+
+          <DashboardProductViewer 
+            :products="allProducts" />
         </main>
 
     </div>
@@ -67,14 +62,15 @@
 
 <script>
 // @ is an alias to /src
-import Alert             from '../components/Alert'
-import LoadingSpinner    from '@/components/LoadingSpinner'
-import PopUpExpired      from '@/components/PopUpExpired'
-import DashboardSideBar  from '@/components/DashboardSideBar'
-import DashboardHeader   from '@/components/DashboardHeader'
-import DashboardVisitors from '@/components/DashboardVisitors'
-import DashboardEvent    from '@/components/DashboardEvent'
-import DashboardSettings from '@/components/DashboardSettings'
+import Alert                  from '../components/Alert'
+import LoadingSpinner         from '@/components/LoadingSpinner'
+import PopUpExpired           from '@/components/PopUpExpired'
+import DashboardSideBar       from '@/components/DashboardSideBar'
+import DashboardHeader        from '@/components/DashboardHeader'
+import DashboardVisitors      from '@/components/DashboardVisitors'
+import DashboardProductViewer from '@/components/DashboardProductViewer'
+import DashboardEvent         from '@/components/DashboardEvent'
+import DashboardSettings      from '@/components/DashboardSettings'
 
 export default {
   name: 'Dashboard',
@@ -86,19 +82,22 @@ export default {
     DashboardSideBar,
     DashboardHeader,
     DashboardVisitors,
+    DashboardProductViewer,
     DashboardEvent,
     DashboardSettings,
   },
   data(){
     return{
-      alertType   : '',
-      alertMsg    : '',
-      alertOn     : false,
-      loadingOn   : false,
+      alertType      : '',
+      alertMsg       : '',
+      alertOn        : false,
+      loadingOn      : false,
       popUpExpiredOn : false,
-      userName  : '',
-      eventOn   : false,
-      settingOn : false,
+      userName       : '',
+      userdata       : JSON.parse(localStorage.getItem('userdata')),
+      eventOn        : false,
+      settingOn      : false,
+      allProducts    : false,
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -118,20 +117,19 @@ export default {
   methods: {
       doUserAuth(withSpinner = true){
         (withSpinner) ? this.loadingOn = true : '';
-        let userdata   = JSON.parse(localStorage.getItem('userdata'));
         
         this.axios
           .get(`${this.$props.apiurl}/user/session`, {
             headers: {
-              'api-key': userdata.api_key,
-              "token"  : userdata.token,
+              'api-key': this.userdata.api_key,
+              "token"  : this.userdata.token,
             }
           })
           .then((response) => {
             if(response.status == 200){
               (withSpinner) ? this.loadingOn = false : '';
-              this.userName  = userdata.username;
-              console.log(response.data);
+              this.getAllProduct();
+              this.userName  = this.userdata.username;
             }
           })
           .catch((error) => {
@@ -150,6 +148,26 @@ export default {
                   }, 600);
                 }
               }
+          })
+      },
+      getAllProduct(){
+        this.axios
+          .get(`${this.$props.apiurl}/get/products`, {
+            headers: {
+              'api-key': this.userdata.api_key,
+            }
+          })
+          .then((response) => {
+            if(response.status == 200){
+              this.allProducts = response.data.data;
+            }
+          })
+          .catch((error) => {
+            if(error.response.status == 500){
+              this.alertType = 'danger';
+              this.alertMsg  = '<b>Ups, products not load!</b> Please refresh page.';
+              this.alertOn   = true;
+            }
           })
       },
       showEvent(status){

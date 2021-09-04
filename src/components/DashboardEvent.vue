@@ -100,7 +100,7 @@ export default {
             eventOn        : false,
             dataIsReady    : false,
             userdata       : JSON.parse(localStorage.getItem('userdata')),
-            poster         : require('@/assets/img/poster.webp'),
+            poster         : require('@/assets/img/bg-poster.webp'),
             day  : '',
             month: '',
             year : '',
@@ -119,7 +119,9 @@ export default {
             .then((response) => {
                 if(response.status == 200){
                     this.dataIsReady = true;
-                    this.poster = response.data.data.poster;
+                    if(response.data.data.poster.split('base64,')[1]!==" "){
+                        this.poster = response.data.data.poster;
+                    }
                     this.day    = response.data.data.day;
                     this.month  = response.data.data.month;
                     this.year   = response.data.data.year;

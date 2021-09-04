@@ -16,7 +16,7 @@
                 container: 'main',
               }"
               @click.prevent="" 
-              class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-4 sm-400:py-6 lg-930:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
+              class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-4 sm-400:py-6 md:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
                 <svg class="w-4 lg-930:w-5" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 512 512">
                     <g><g><path fill="#fff" d="m80.1,405.6c3.5,2.4 17,9.1 28.4-5.3l77.2-112.8 81.7,78.8c4.3,4.1 10.2,6.3 16.2,5.6 5.9-0.6 11.3-3.7 14.8-8.6l135.5-194.3 4.9,65c1.2,16.5 16.7,19.2 21.9,18.8 11.2-0.9 19.7-10.6 18.8-21.9l-8.6-114.3c-0.8-11.2-10.6-19.7-21.9-18.8l-114.3,8.6c-11.2,0.8-19.7,10.6-18.8,21.9 0.8,11.2 10.5,19.6 21.9,18.8l65-4.9-124.2,178-81.9-79c-4.3-4.2-10.3-6.3-16.2-5.6-6,0.6-11.4,3.8-14.8,8.8l-90.9,132.8c-6.4,9.3-4,22 5.3,28.4z"/><path fill="#fff" d="M480.6,460.2H51.8V31.4c0-11.3-9.1-20.4-20.4-20.4S11,20.1,11,31.4v449.2c0,11.3,9.1,20.4,20.4,20.4h449.2    c11.3,0,20.4-9.1,20.4-20.4C501,469.3,491.9,460.2,480.6,460.2z"/></g></g>
                 </svg>
@@ -25,7 +25,7 @@
             <a 
             href=""
             @click.prevent="$emit('event-on')" 
-            class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-4 sm-400:py-6 lg-930:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
+            class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-4 sm-400:py-6 md:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
                 <svg class="w-4 lg-930:w-6" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                     viewBox="0 0 464.883 464.883" style="enable-background:new 0 0 464.883 464.883;" xml:space="preserve">
                     <g><g><path fill="#fff" d="M396.409,212.577L396.409,212.577V95.33c0-27.866-22.819-50.882-50.687-50.882h-6.313V36.5c0-19.882-16.118-36-36-36
@@ -55,7 +55,7 @@
                 container: 'main',
               }"
               @click.prevent="" 
-              class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-4 sm-400:py-6 lg-930:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
+              class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-4 sm-400:py-6 md:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
                 <svg class="w-4 lg-930:w-5" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
                     <g><g><path fill="#fff" d="M476.919,141.304l-0.379-0.655c-0.525-1.089-1.131-2.132-1.807-3.123L403.504,14.38C398.373,5.51,388.821,0,378.574,0
@@ -77,7 +77,7 @@
                 container: 'main',
               }"
               @click.prevent="" 
-              class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-4 sm-400:py-6 lg-930:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
+              class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-4 sm-400:py-6 md:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
                 <svg class="w-4 lg-930:w-5" viewBox="0 0 512 445" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M435.06 0H76.9399C56.541 0.022217 36.9839 8.13549 22.5597 22.5597C8.13549 36.9839 0.022217 56.541 0 76.9399V264.393C0.022217 284.792 8.13549 304.349 22.5597 318.774C36.9839 333.198 56.541 341.311 76.9399 341.333H105.276C109.003 377.705 104.929 412.526 94.6445 429.934C93.6804 431.556 93.2061 433.423 93.2787 435.308C93.3513 437.194 93.9677 439.018 95.0536 440.561C96.1395 442.104 97.6485 443.3 99.3988 444.005C101.149 444.71 103.066 444.893 104.918 444.534C132.479 439.215 158.225 426.943 179.713 408.882C201.2 390.821 217.718 367.569 227.697 341.333H435.06C455.459 341.311 475.016 333.198 489.44 318.774C503.864 304.349 511.978 284.792 512 264.393V76.9399C511.978 56.541 503.864 36.9839 489.44 22.5597C475.016 8.13549 455.459 0.022217 435.06 0V0ZM492.415 264.393C492.399 279.6 486.351 294.179 475.598 304.932C464.846 315.684 450.267 321.732 435.06 321.749H220.692C218.607 321.749 216.578 322.415 214.898 323.649C213.219 324.883 211.977 326.62 211.352 328.609C204.111 349.917 192.077 369.279 176.178 385.206C160.278 401.133 140.936 413.2 119.64 420.478C127.715 392.936 127.273 356.744 123.68 330.226C123.361 327.878 122.201 325.725 120.416 324.166C118.631 322.608 116.342 321.749 113.972 321.749H76.9399C61.7333 321.732 47.1543 315.684 36.4016 304.932C25.649 294.179 19.601 279.6 19.5847 264.393V76.9399C19.601 61.7333 25.649 47.1543 36.4016 36.4016C47.1543 25.649 61.7333 19.601 76.9399 19.5847H435.06C450.267 19.601 464.846 25.649 475.598 36.4016C486.351 47.1543 492.399 61.7333 492.415 76.9399V264.393Z" fill="white"/>
                     <path d="M381.902 144.087C376.645 144.087 371.506 145.646 367.135 148.567C362.764 151.487 359.357 155.638 357.346 160.495C355.334 165.352 354.808 170.696 355.833 175.852C356.859 181.008 359.39 185.744 363.107 189.461C366.824 193.178 371.56 195.71 376.716 196.735C381.872 197.761 387.216 197.234 392.073 195.223C396.93 193.211 401.081 189.804 404.001 185.433C406.922 181.062 408.481 175.924 408.481 170.667C408.472 163.62 405.669 156.865 400.686 151.882C395.703 146.899 388.948 144.096 381.902 144.087V144.087ZM381.902 177.661C380.518 177.661 379.166 177.251 378.016 176.482C376.865 175.714 375.969 174.621 375.44 173.343C374.91 172.065 374.772 170.659 375.041 169.302C375.311 167.945 375.978 166.699 376.956 165.721C377.934 164.743 379.18 164.076 380.537 163.806C381.894 163.537 383.3 163.675 384.578 164.205C385.856 164.734 386.949 165.63 387.717 166.781C388.486 167.931 388.896 169.283 388.896 170.667C388.893 172.521 388.155 174.298 386.844 175.609C385.533 176.92 383.756 177.658 381.902 177.661Z" fill="white"/>
@@ -93,7 +93,7 @@
                 el: '#banner',
                 container: 'main',
               }"
-              class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-4 sm-400:py-6 lg-930:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
+              class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-4 sm-400:py-6 md:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
                 <svg class="w-4 lg-930:w-5" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
                 <g><g><path fill="#fff" d="M504.556,55.83c-6.226-8.768-15.494-14.587-26.094-16.384c-10.604-1.796-21.27,0.642-30.037,6.866
@@ -115,7 +115,7 @@
             <a 
             href=""
             @click.prevent="$emit('settings-on')" 
-            class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-4 sm-400:py-6 lg-930:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
+            class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-4 sm-400:py-6 md:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
                 <svg class="w-4 lg-930:w-5" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
                     <g><g><path fill="#fff" d="M256,140c-63.963,0-116,52.038-116,116s52.037,116,116,116c11.947,0,23.735-1.813,35.036-5.39
                         c10.531-3.333,16.365-14.572,13.032-25.103c-3.332-10.531-14.574-16.366-25.103-13.033C271.573,330.814,263.847,332,256,332
@@ -160,7 +160,7 @@
             <a 
             href=""
             @click.prevent="doLogOut()" 
-            class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-4 sm-400:py-6 lg-930:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
+            class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-4 sm-400:py-6 md:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
                 <svg class="w-4 lg-930:w-5" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 viewBox="0 0 30.143 30.143" style="enable-background:new 0 0 30.143 30.143;" xml:space="preserve">
                     <g><path fill="#fff" d="M20.034,2.357v3.824c3.482,1.798,5.869,5.427,5.869,9.619c0,5.98-4.848,10.83-10.828,10.83

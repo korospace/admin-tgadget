@@ -1,7 +1,7 @@
 <template>
     <form
       id="dashboard-visitors"
-      class="w-full pt-10 px-5 grid grid-cols-2 sm:grid-cols-3 gap-5">
+      class="w-full mt-10 px-5 grid grid-cols-2 sm:grid-cols-3 gap-5">
 
         <div
           v-for="(data,name) in allData" :key="data.id"
@@ -51,7 +51,7 @@
                   :name="'link_'+name" 
                   type="text"
                   @keyup.enter="editSosmed($event)"
-                  class="input_link_sosmed bg-tgadgety-500 w-full box-border border-b border-white text-white text-xxs sm-400:text-xs lg-930:text-sm opacity-80 outline-none hidden" autofocus>
+                  class="input_link_sosmed bg-tgadgety-500 w-full pb-0.5 box-border border-b border-white text-white text-xxs sm-400:text-xs lg-930:text-sm opacity-80 outline-none hidden" autofocus>
                 <img
                   v-if="data.url"
                   :src="editIcon"

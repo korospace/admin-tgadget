@@ -1,10 +1,16 @@
 import Vue from 'vue'
 import App from './App.vue'
-import './assets/tailwind.css'
 import router from './router'
+// tailwind
+import './assets/tailwind.css'
+// vue scrollto
 import VueScrollTo from 'vue-scrollto'
+// axios
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+// chart.js
+import Chartkick from 'vue-chartkick'
+import Chart from 'chart.js'
 
 Vue.config.productionTip = false
 
@@ -23,6 +29,8 @@ Vue.use(VueScrollTo, {
 })
 
 Vue.use(VueAxios,axios);
+
+Vue.use(Chartkick.use(Chart))
 
 new Vue({
   router,
