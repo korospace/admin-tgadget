@@ -1,7 +1,7 @@
 <template>
     <div
       id="dashboard-sidebar"
-      class="bg-tgadgety absolute sm:relative bottom-0 z-20 w-full sm:w-36 lg-930:w-52 h-auto sm:h-full sm:flex flex-col rounded-t-md sm:rounded-r-md overflow-hidden" style="box-shadow: 0.5px 0px 8px 0px rgba(0,0,0,0.3);">
+      class="bg-tgadgety fixed sm:relative bottom-0 z-20 w-full sm:w-36 lg-930:w-52 h-auto sm:h-full sm:flex flex-col rounded-t-md sm:rounded-r-md overflow-hidden" style="box-shadow: 0.5px 0px 8px 0px rgba(0,0,0,0.3);">
         <LoadingSpinner
           v-if="loadingOn"
           :successicon="false"/>
