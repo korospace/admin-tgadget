@@ -4,10 +4,10 @@
       class="w-full mt-5 px-5">
         <div
           class="bg-tgadgety-500 w-full pt-4 pl-4 pb-3 rounded-md overflow-auto"
-          :class="{'h-52': true,'animate-pulse': products==false,'shadow-card': products!=false,'opacity-70':products==false,}">
+          :class="{'h-52': products==false,'animate-pulse': products==false,'shadow-card': products!=false,'opacity-70':products==false,}">
             <column-chart
               v-if="products"
-              :width="chartWidth+'px'" height="100%"
+              :width="chartWidth+'px'" 
               ytitle="Viewers" 
               :min="0" :max="maxViewer" 
               :data="arrayMaker">
@@ -28,8 +28,10 @@ export default {
       arrayMaker(){
         let arrayViwers = [];
         this.$props.products.forEach(p => {
-          arrayViwers.push([p.name,p.viewers]);
+          arrayViwers.push([p.name, parseInt(p.viewers)]);
         });
+        
+        arrayViwers.sort( (a,b) => b[1]-a[1] );
         return arrayViwers;
       },
       maxViewer(){
