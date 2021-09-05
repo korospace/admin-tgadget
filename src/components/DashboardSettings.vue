@@ -2,17 +2,8 @@
     <transition name="fade">
     <div
       id="dashboard-settings"
-      v-if="settingOn"
       class="fixed z-30 top-0 bottom-0 right-0 left-0 flex justify-end py-5 px-5 sm:px-10 overflow-hidden"
       style="background-color: rgba(0,0,0,0.4)">
-
-        <LoadingSpinner
-          v-if="loadingOn"
-          :msg="spinnerMsg"
-          :successicon="successIcon"/>
-        
-        <PopUpExpired
-          v-if="popUpExpiredOn" />
 
         <transition name="slide" appear>
         <div class="bg-white w-96 flex flex-col rounded-md">
@@ -72,7 +63,7 @@
                     </div>
                     <button 
                       class="mt-7 px-3 py-1 border border-tgadgety rounded-sm tracking-widest transition-all text-tgadgety-500 hover:text-tgadgety border-2 border-tgadgety-500 hover:border-tgadgety mr-2" 
-                      @click.prevent="$emit('settings-off')">
+                      @click.prevent="$emit('close')">
                         close
                     </button>
                     <button 
@@ -113,24 +104,12 @@
 </template>
 
 <script>
-import LoadingSpinner from '@/components/LoadingSpinner'
-import PopUpExpired   from '@/components/PopUpExpired'
-
 export default {
     props: ['apiurl'],
-    components: {
-        LoadingSpinner,
-        PopUpExpired,
-    },
     data() {
         return{
-            settingOn      : false,
             imgCopy        : require('@/assets/img/copy.svg'),
             userdata       : JSON.parse(localStorage.getItem('userdata')),
-            loadingOn      : false,
-            successIcon    : false,
-            spinnerMsg     : 'please wait!',
-            popUpExpiredOn : false,
             formValidation : {
                 new_username: '',
                 new_password: ''
@@ -158,7 +137,8 @@ export default {
             }
 
             if(invalid == false){
-                this.loadingOn = true;
+                this.$emit('loading-on',true);
+
                 this.axios
                 .put(`${this.$props.apiurl}/user/update`,formEditUser, {
                     headers: {
@@ -167,36 +147,39 @@ export default {
                     }
                 })
                 .then((response) => {
-                    if(response.data.message == 'update user is success!'){
+                    if(response.status == 201){
+                        this.$emit('show-successicon',true);
+                        this.$emit('loading-msg',"update success!");
                         this.$emit('change-username',formEditUser.get('new_username'));
-                        this.successIcon = true;
-                        this.spinnerMsg  = "edit success!";
 
                         this.userdata.username = formEditUser.get('new_username');
                         this.userdata.password = formEditUser.get('new_password');
                         localStorage.setItem('userdata',JSON.stringify(this.userdata));
-                        setTimeout(() => {
-                            this.successIcon = false;    
-                            this.spinnerMsg  = "please wait!";
-                            this.loadingOn   = false;
-                        }, 2000);
                         
+                        setTimeout(() => {
+                            this.$emit('loading-on',false);
+                            this.$emit('show-successicon',false);
+                            this.$emit('loading-msg',false);
+                        }, 1000);
                     }
                 })
                 .catch((error) => {
-                    this.loadingOn = false;
+                    this.$emit('loading-on',false);
 
+                    // If format data is wrong
                     if(error.response.status == 400){
                         let message = error.response.data.message;
                         this.formValidation.new_username = message.new_username;
                         this.formValidation.new_password = message.new_password;
                     }
                     if(error.response.status == 401){
+                        // Expired token
                         if(error.response.data.message == 'expired token'){
                             setTimeout(() => {
-                                this.popUpExpiredOn = true;
+                                this.$emit('expired-on');
                             }, 600);
                         }
+                        // Unauthorized
                         if(error.response.data.message == 'Unauthorized'){
                             setTimeout(() => {
                                 localStorage.removeItem('userdata');
@@ -213,9 +196,6 @@ export default {
             }
         }
     },
-    mounted(){
-        this.settingOn = true;
-    }
 }
 </script>
 

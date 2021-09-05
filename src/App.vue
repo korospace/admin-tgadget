@@ -36,6 +36,11 @@ export default {
   }
   
   @font-face {
+    font-family: "Rc-reg";
+    src: local("Rc-reg"),
+         url(./assets/fonts/RobotoCondensed-Regular.ttf) format("truetype");
+  }
+  @font-face {
     font-family: "Rc-bold";
     src: local("Rc-bold"),
          url(./assets/fonts/RobotoCondensed-Bold.ttf) format("truetype");

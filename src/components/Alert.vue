@@ -2,7 +2,7 @@
     <transition name="slide">
     <div 
       v-if="alertOn"
-      class="fixed z-50 top-0 left-0 right-0 px-5 py-4 flex items-center"
+      class="fixed z-100 top-0 left-0 right-0 px-5 py-4 flex items-center"
       :class="{'bg-red-200':type=='danger','bg-yellow-200':type=='warning','bg-green-200':type=='success','bg-blue-200':type=='info'}">
         <h1
           v-html="msg"

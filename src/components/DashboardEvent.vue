@@ -2,17 +2,8 @@
     <transition name="fade">
     <div
       id="dashboard-event"
-      v-if="eventOn"
       class="fixed z-30 top-0 bottom-0 right-0 left-0 flex justify-end py-5 px-5 sm:px-10 overflow-hidden"
       style="background-color: rgba(0,0,0,0.4)">
-
-        <LoadingSpinner
-          v-if="loadingOn"
-          :msg="spinnerMsg"
-          :successicon="successIcon"/>
-        
-        <PopUpExpired
-          v-if="popUpExpiredOn" />
 
         <transition name="slide" appear>
         <form @submit.prevent="doEditEvent($event.target)" class="bg-white w-80 flex flex-col rounded-md text-tgadgety">
@@ -42,17 +33,17 @@
                     <input
                       v-if="dataIsReady" 
                       @keyup="numFilter(2,$event)"
-                      type="number" :value="day" name="day" placeholder="day" 
+                      type="number" :value="day" name="day" placeholder="dd" 
                       class="block w-full px-2 py-1.5 text-tgadgety font-extrabold outline-none rounded-md">
                     <input
                       v-if="dataIsReady" 
                       @keyup="numFilter(2,$event)"
-                      type="number" :value="month" name="month" placeholder="month"
+                      type="number" :value="month" name="month" placeholder="mm"
                       class="block w-full px-2 py-1.5 text-tgadgety font-extrabold outline-none rounded-md mx-2">
                     <input
                       v-if="dataIsReady" 
                       @keyup="numFilter(4,$event)"
-                      type="number" :value="year" name="year" placeholder="year" class="block w-full px-2 py-1.5 text-tgadgety font-extrabold outline-none rounded-md">
+                      type="number" :value="year" name="year" placeholder="yyyy" class="block w-full px-2 py-1.5 text-tgadgety font-extrabold outline-none rounded-md">
                     <div v-if="dataIsReady==false" class="bg-tgadgety-500 w-full h-10 animate-pulse box-border opacity-70 rounded-md"></div>
                     <div v-if="dataIsReady==false" class="bg-tgadgety-500 w-full h-10 animate-pulse box-border opacity-70 rounded-md mx-2"></div>
                     <div v-if="dataIsReady==false" class="bg-tgadgety-500 w-full h-10 animate-pulse box-border opacity-70 rounded-md"></div>
@@ -63,7 +54,7 @@
             <div class="footer w-full flex px-5 py-3">
                 <button 
                   class="flex-1 px-3 py-1 border border-tgadgety rounded-sm tracking-widest transition-all text-tgadgety-500 hover:text-tgadgety border-2 border-tgadgety-500 hover:border-tgadgety mr-2" 
-                  @click.prevent="$emit('event-off')">
+                  @click.prevent="$emit('close')">
                     close
                 </button>
                 <button 
@@ -79,31 +70,16 @@
 </template>
 
 <script>
-import LoadingSpinner from '@/components/LoadingSpinner'
-import PopUpExpired   from '@/components/PopUpExpired'
-
 export default {
     props: ['apiurl'],
-    components: {
-        LoadingSpinner,
-        PopUpExpired,
-    },
     data() {
         return{
-            alertOn        : false,
-            alertMsg       : '',
-            alertType      : '',
-            loadingOn      : false,
-            successIcon    : false,
-            spinnerMsg     : 'please wait!',
-            popUpExpiredOn : false,
-            eventOn        : false,
-            dataIsReady    : false,
-            userdata       : JSON.parse(localStorage.getItem('userdata')),
-            poster         : require('@/assets/img/bg-poster.webp'),
-            day  : '',
-            month: '',
-            year : '',
+            dataIsReady : false,
+            userdata    : JSON.parse(localStorage.getItem('userdata')),
+            poster      : require('@/assets/img/bg-poster.webp'),
+            day         : '',
+            month       : '',
+            year        : '',
         }
     },
     methods: {
@@ -119,6 +95,8 @@ export default {
             .then((response) => {
                 if(response.status == 200){
                     this.dataIsReady = true;
+
+                    // If poster not empty
                     if(response.data.data.poster.split('base64,')[1]!==" "){
                         this.poster = response.data.data.poster;
                     }
@@ -129,11 +107,13 @@ export default {
             })
             .catch((error) => {
                 if(error.response.status == 401){
+                    // Expired token
                     if(error.response.data.message == 'expired token'){
                         setTimeout(() => {
-                            this.popUpExpiredOn = true;
+                            this.$emit('expired-on');
                         }, 600);
                     }
+                    // Unauthorized
                     if(error.response.data.message == 'Unauthorized'){
                         setTimeout(() => {
                             localStorage.removeItem('userdata');
@@ -141,25 +121,31 @@ export default {
                         }, 600);
                     }
                 }
+                // Server error
                 if(error.response.status == 500){
-                    this.$emit('change-alerttype','danger');
-                    this.$emit('change-alertmsg','<b>Ups, server error!</b> Please refresh page.');
-                    this.$emit('alerton',true);
+                    this.$emit('alert-on',{
+                        type: 'danger',
+                        msg: '<b>Ups, server error!</b> Please refresh page.'
+                    });
                 }
             })
         },
         changePreview(event){
+            // If file is not image
             if(!/image/.test(event.target.files[0].type)){
-                this.$emit('change-alerttype','danger');
-                this.$emit('change-alertmsg','<b>upload failed!</b> file is not image.');
-                this.$emit('alerton',true);
+                this.$emit('alert-on',{
+                    type: 'danger',
+                    msg: '<b>upload failed!</b> file is not image.'
+                });
                 event.target.value = "";
                 return false;
             }
+            // If file size more than 200kb
             else if(event.target.files[0].size > 200000){
-                this.$emit('change-alerttype','danger');
-                this.$emit('change-alertmsg','<b>upload failed!</b> file more than 200kb.');
-                this.$emit('alerton',true);
+                this.$emit('alert-on',{
+                    type: 'danger',
+                    msg: '<b>upload failed!</b> file more than 200kb.'
+                });
                 event.target.value = "";
                 return false;
             }
@@ -184,13 +170,14 @@ export default {
                 wrongFormat = true;
             }
             if(wrongFormat){
-                this.$emit('change-alerttype','danger');
-                this.$emit('change-alertmsg','<b>update failed!</b> date format is dd-mm-yyyy.');
-                this.$emit('alerton',true);
+                this.$emit('alert-on',{
+                    type: 'danger',
+                    msg: '<b>update failed!</b> date format is dd-mm-yyyy.'
+                });
                 return 0;
             }
 
-            this.loadingOn  = true;
+            this.$emit('loading-on',true);
 
             this.axios
             .put(`${this.$props.apiurl}/update/countdown`,formEditPoster, {
@@ -201,14 +188,14 @@ export default {
             })
             .then((response) => {
                 if(response.status == 201){
-                    this.successIcon = true;
-                    this.spinnerMsg  = 'update success';
+                    this.$emit('show-successicon',true);
+                    this.$emit('loading-msg',"update success!");
                     this.getData();
 
                     setTimeout(() => {
-                        this.loadingOn   = false;
-                        this.successIcon = false;    
-                        this.spinnerMsg  = "please wait!";
+                        this.$emit('loading-on',false);
+                        this.$emit('show-successicon',false);
+                        this.$emit('loading-msg',false);
                     }, 2000);
                 }
             })
@@ -218,7 +205,7 @@ export default {
                 if(error.response.status == 401){
                     if(error.response.data.message == 'expired token'){
                         setTimeout(() => {
-                            this.popUpExpiredOn = true;
+                            this.$emit('expired-on');
                         }, 600);
                     }
                     if(error.response.data.message == 'Unauthorized'){
@@ -237,7 +224,6 @@ export default {
         }
     },
     mounted(){
-        this.eventOn = true;
         this.getData();
     }
 }
