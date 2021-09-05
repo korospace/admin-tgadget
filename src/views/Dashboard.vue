@@ -40,19 +40,24 @@
           @change-username="userName=$event"
           @settings-off="showSettings(false)" />
         
-        <main class="bg-white relative z-10 flex-1 pb-20 sm:pb-5 overflow-auto">
+        <main class="bg-white relative z-10 flex-1 overflow-auto">
           
-          <DashboardHeader :username="userName" />
+          <div class="w-full flex flex-col" :class="{'min-h-screen':allProducts.length==0}">
+            <DashboardHeader :username="userName" />
+            
+            <DashboardVisitors
+              :apiurl="apiurl"
+              @change-alerttype="alertType = $event"
+              @change-alertmsg="alertMsg = $event"
+              @alerton="alertOn=true"
+              @expiredon="popUpExpiredOn=true" />
 
-          <DashboardVisitors
-            :apiurl="apiurl"
-            @change-alerttype="alertType = $event"
-            @change-alertmsg="alertMsg = $event"
-            @alerton="alertOn=true"
-            @expiredon="popUpExpiredOn=true" />
+            <DashboardProductViewer 
+              :products="allProducts" />
+          </div>
 
-          <DashboardProductViewer 
-            :products="allProducts" />
+          <DashboardProducts 
+              :products="allProducts" />
         </main>
 
     </div>
@@ -69,6 +74,7 @@ import DashboardSideBar       from '@/components/DashboardSideBar'
 import DashboardHeader        from '@/components/DashboardHeader'
 import DashboardVisitors      from '@/components/DashboardVisitors'
 import DashboardProductViewer from '@/components/DashboardProductViewer'
+import DashboardProducts      from '@/components/DashboardProducts'
 import DashboardEvent         from '@/components/DashboardEvent'
 import DashboardSettings      from '@/components/DashboardSettings'
 
@@ -83,6 +89,7 @@ export default {
     DashboardHeader,
     DashboardVisitors,
     DashboardProductViewer,
+    DashboardProducts,
     DashboardEvent,
     DashboardSettings,
   },
@@ -97,7 +104,7 @@ export default {
       userdata       : JSON.parse(localStorage.getItem('userdata')),
       eventOn        : false,
       settingOn      : false,
-      allProducts    : false,
+      allProducts    : [],
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -160,9 +167,13 @@ export default {
           .then((response) => {
             if(response.status == 200){
               this.allProducts = response.data.data;
+              console.log(this.allProducts);
             }
           })
           .catch((error) => {
+            if(error.response.status == 404){
+              this.allProducts = "notfound";
+            }
             if(error.response.status == 500){
               this.alertType = 'danger';
               this.alertMsg  = '<b>Ups, products not load!</b> Please refresh page.';
@@ -183,6 +194,24 @@ export default {
       setTimeout(() => {
         this.doUserAuth();
       }, 600);
+      if(!navigator.onLine){
+        this.alertType = 'danger';
+        this.alertMsg  = '<b>Ups, connection lost!</b> Please check your connection.';
+        this.alertOn   = true;
+      }
+      if(navigator.onLine){
+        this.alertOn = false;
+        this.doUserAuth();
+      }
+      window.onoffline = () => {
+        this.alertType = 'danger';
+        this.alertMsg  = '<b>Ups, connection lost!</b> Please check your connection.';
+        this.alertOn   = true;
+      };
+      window.ononline = () => {
+        this.alertOn  = false;
+        this.doUserAuth();
+      };
   },
 }
 </script>

@@ -1,0 +1,94 @@
+<template>
+    <div
+      id="dashboard-products"
+      class="w-full flex py-5 px-5">
+        <div
+          class="bg-tgadgety-500 w-full max-h-screen min-h-screen bg-tgadgety-500 relative pt-4 pr-4 pl-4 rounded-sm overflow-auto"
+          :class="{'animate-pulse opacity-70': products.length==0,'shadow-card': products.length>0,'flex flex-col justify-center items-center text-center':products=='notfound'}">
+            <h1 
+              v-if="products=='notfound'"
+              class="notfound text-4xl text-white opacity-80">
+                product not found
+            </h1>
+            <router-link 
+              v-if="products=='notfound'"
+              class="mt-2 text-white underline"
+              to="">
+                add product
+            </router-link>
+              
+            <div
+              v-for="data of products"
+              :key="data.id"
+              class="w-full flex flex-col sm:flex-row mb-4 rounded-md shadow-md overflow-x-auto"
+              :class="{'hidden':products=='notfound'}"
+              style="background-color: rgba(255,255,255,0.49);">
+                <div class="flex-1 flex flex-col sm-400:flex-row pl-4 sm:pl-0 pr-4 sm-400:pr-0 pt-4 sm:pt-0">
+                    <img
+                      :src="data.img"
+                      class="bg-white w-full sm-400:w-44 lg:w-52 rounded-tl-md rounded-tr-md sm-400:rounded-tr-none">
+                    <div class="flex-1 sm:w-100 lg-930:flex-1 h-full pt-4 sm-400:pt-0 sm:py-4 px-0 sm-400:px-6">
+                        <span class="bg-tgadgety block w-max text-xs text-white px-2 lg:px-3 py-1 lg:py-1.5 rounded-sm shadow-sm opacity-80">
+                            {{(data.stock == 1) ? 'ready' : 'not ready'}}
+                        </span>
+                        <h1 class="name mt-2 text-xl lg:text-2xl text-tgadgety capitalize opacity-80" style="display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;">
+                            {{data.name}}
+                        </h1>
+                        <h2 class="price mt-2 text-md lg:text-xl text-tgadgety opacity-80">
+                            Rp. {{data.price}}
+                        </h2>
+                        <div class="block mt-2 pt-1 text-tgadgety text-sm opacity-80 capitalize tracking-widest" style="border-top: 1px solid rgba(241, 141, 67, 0.4)">
+                            visitor:
+                        </div>
+                        <div class="w-full grid grid-cols-4 sm-400:grid-cols-2-max sm:grid-cols-4 gap-4 mt-2 lg:mt-4">
+                            <div class="flex-1 flex items-center opacity-80">
+                                <img class="w-4 xl-1144:w-6" :src="require('@/assets/img/tokopedia-y.svg')">
+                                <small class="ml-3 text-xl xl-1144:text-3xl text-tgadgety">{{data.tokopedia}}</small>
+                            </div>
+                            <div class="flex-1 flex items-center opacity-80">
+                                <img class="w-4 xl-1144:w-6" :src="require('@/assets/img/shopee-y.svg')">
+                                <small class="ml-3 text-xl xl-1144:text-3xl text-tgadgety">{{data.shopee}}</small>
+                            </div>
+                            <div class="flex-1 flex items-center opacity-80">
+                                <img class="w-4 xl-1144:w-6" :src="require('@/assets/img/lazada-y.svg')">
+                                <small class="ml-3 text-xl xl-1144:text-3xl text-tgadgety">{{data.lazada}}</small>
+                            </div>
+                            <div class="flex-1 flex items-center opacity-80">
+                                <img class="w-4 xl-1144:w-6" :src="require('@/assets/img/whatsapp-y.svg')">
+                                <small class="ml-3 text-xl xl-1144:text-3xl text-tgadgety">{{data.whatsapp}}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full sm:w-60 xl-1144:w-80 min-h-full py-4 pr-4 pl-4 sm:pl-0" style="border-left: 0px solid rgba(241, 141, 67, 0.4)">
+                    <div class="bg-tgadgety w-full h-44 sm:min-h-full sm:max-h-10 py-2 px-4 text-white rounded-sm overflow-y-auto overflow-x-hidden opacity-80">
+                        <span class="deskripsi text-sm lg-930:text-base opacity-80">
+                            {{data.deskripsi}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div> 
+</template>
+
+<script>
+export default {
+    props: ['products'],
+}
+</script>
+
+<style scoped>
+    h1.name,h1.notfound{
+        font-family: 'Rc-bold';
+        /* color: rgba(241, 141, 67); */
+    }
+    h2.price,.deskripsi{
+        font-family: 'Quicksand-Regular';
+    }
+    h3{
+        font-family: 'Quicksand-Medium';
+    }
+</style>

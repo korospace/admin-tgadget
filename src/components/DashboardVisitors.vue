@@ -7,7 +7,7 @@
           v-for="(data,name) in allData" :key="data.id"
           :id="name"
           class="bg-tgadgety-500 h-24 sm-400:h-32 lg-930:h-40 px-4 pt-2 pb-2 sm-400:pb-4 rounded-sm"
-          :class="{'animate-pulse':finishGet==false,'opacity-70':finishGet==false,}"
+          :class="{'animate-pulse opacity-70':finishGet==false}"
           :style="{'box-shadow': cardShadow}">
             <div
               v-if="finishGet" 
@@ -29,7 +29,7 @@
               class="url-wraper w-full h-2/5 lg-930:h-2/6 flex items-end">
                 <a
                   v-if="data.url"
-                  :href="data.url" target="_blank"
+                  :href="(data.url=='not available') ? '#/'+data.url : data.url" target="_blank"
                   class="w-full text-white text-xxs sm-400:text-xs lg-930:text-sm underline opacity-80 hover:opacity-100 active:opacity-100"
                   style="display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;">
                   {{data.url}}
