@@ -40,7 +40,7 @@
           @change-username="userName=$event"
           @settings-off="showSettings(false)" />
         
-        <main class="bg-white relative z-10 flex-1 overflow-auto">
+        <main class="bg-white relative z-10 flex-1 overflow-auto pb-16 sm:pb-0">
           
           <div class="w-full flex flex-col" :class="{'min-h-screen':allProducts.length==0}">
             <DashboardHeader :username="userName" />
