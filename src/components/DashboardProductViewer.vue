@@ -2,10 +2,10 @@
     <div
       id="products-viewer"
       class="w-full flex mt-5 px-5"
-      :class="{'flex-1': products.length==0}">
+      :class="{'h-80': products.length==0}">
         <div
           class="bg-tgadgety-500 w-full relative pt-4 pl-4 pb-3 rounded-sm overflow-auto"
-          :class="{'h-52 sm:h-auto animate-pulse opacity-70': products.length==0,'shadow-card': products.length>0,}">
+          :class="{'h-full animate-pulse opacity-70': products.length==0,'shadow-card': products.length>0,}">
             <div class="absolute top-0 bottom-0 flex items-center">
               <small
                 v-if="products.length>0"
@@ -28,10 +28,6 @@
 <script>
 export default {
     props: ['products'],
-    data() {
-      return{
-      }
-    },
     computed: {
       dataViewers(){
         if(this.$props.products == "notfound"){
@@ -79,7 +75,5 @@ export default {
 </script>
 
 <style scoped>
-  small.title{
-    /* font-family: 'Quicksand-SemiBold'; */
-  }
+  
 </style>

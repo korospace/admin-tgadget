@@ -38,6 +38,7 @@
             <FormLoginRegister
               formtype="formRegister"
               :validation="formValidation"
+              :isdisabled="formDisabled"
               @form-onsubmit="formOnSubmit($event)" />
         </div>
 
@@ -64,6 +65,7 @@ export default {
             loadingOn      : false,
             successIcon    : false,
             loadingMsg     : 'please wait',
+            formDisabled   : false,
             apiIlustration : require('@/assets/img/api-ilustration.webp'),
             formValidation : {
                 email    : '',
@@ -79,6 +81,11 @@ export default {
         next();
     },
     methods: {
+        showAlert(data){
+            this.alertType = data.type;
+            this.alertMsg  = data.msg;
+            this.alertOn   = true;
+        },
         formOnSubmit(form){
             let invalid    = false;
             let formLogin  = new FormData(form);
@@ -132,7 +139,27 @@ export default {
                 })
             }
         }
-    }
+    },
+    mounted(){
+        if(!navigator.onLine){
+            this.formDisabled = true;
+            this.showAlert({
+                type: 'danger',
+                msg: '<b>Ups, connection lost!</b> Please check your connection.'
+            });
+        }
+        window.onoffline = () => {
+            this.formDisabled = true;
+            this.showAlert({
+                type: 'danger',
+                msg: '<b>Ups, connection lost!</b> Please check your connection.'
+            });
+        };
+        window.ononline = () => {
+            this.formDisabled = false;
+            this.alertOn      = false;
+        };
+    },
 }
 </script>
 

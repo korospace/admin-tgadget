@@ -1,22 +1,31 @@
 <template>
     <div
       id="dashboard-products"
-      class="w-full flex py-5 px-5">
+      class="w-full flex pt-5 px-5">
 
         <div
-          class="bg-tgadgety-500 w-full max-h-screen min-h-screen bg-tgadgety-500 relative pt-4 pr-4 pl-4 rounded-sm overflow-auto"
+          class="bg-tgadgety-500 relative w-full max-h-screen min-h-screen bg-tgadgety-500 pr-4 pl-4 rounded-sm overflow-auto"
           :class="{'animate-pulse opacity-70': products.length==0,'shadow-card': products.length>0,'flex flex-col justify-center items-center text-center':products=='notfound'}">
+
+            <div
+              class="bg-tgadgety-500 z-10 top-0 left-0 right-0 flex justify-between sm-400:justify-start"
+              :class="{'sticky pt-4 pb-8': products!='notfound','absolute py-4 px-4': products=='notfound',}">
+                <input
+                  class="px-2 py-1 rounded-sm shadow text-tgadgety outline-none box-border w-5/6 sm-400:w-auto"
+                  placeholder="search product"
+                  @keyup="searchProduct($event)">
+                <router-link 
+                class="p-2 rounded-sm tracking-widest transition-all opacity-80 hover:opacity-100 hover:bg-tgadgety active:bg-tgadgety border border-white shadow ml-2"
+                to="">
+                    <img :src="require('@/assets/img/plus.svg')" class="w-4">
+                </router-link>
+            </div>
+
             <h1 
               v-if="products=='notfound'"
               class="notfound text-4xl text-white opacity-80">
                 product not found
             </h1>
-            <router-link 
-              v-if="products=='notfound'"
-              class="mt-2 text-white underline"
-              to="">
-                add product
-            </router-link>
               
             <div
               v-for="data of products"
@@ -71,8 +80,11 @@
 
                     <div class="w-full flex mt-2">
                         <button 
-                        class="flex-1 flex justify-center px-3 py-2 border border-tgadgety rounded-sm tracking-widest transition-all border-2 border-tgadgety opacity-80 hover:opacity-100 mr-2" 
-                        @click.prevent="showConfirm(data.id);">
+                          class="flex-1 flex justify-center px-3 py-2 border border-tgadgety rounded-sm tracking-widest transition-all opacity-80 hover:opacity-100 mr-2" 
+                          @click.prevent="showPopUpDelete({
+                            id: data.id,
+                            name: 'product'
+                          });">
                             <img class="w-5" :src="require('@/assets/img/garbage.svg')">
                         </button>
                         <button 
@@ -88,17 +100,19 @@
 </template>
 
 <script>
-
 export default {
     props: ['products'],
     components: {
     },
     methods: {
-        showConfirm(id){
-            this.$emit('showpopupdelete');
-            this.$emit('changeprodid',id);
+        searchProduct(event){
+            this.$emit('search-product',event.target.value);
+        },
+        showPopUpDelete(data){
+            this.$emit('showpopup');
+            this.$emit('changetargetdelete',data);
         }
-    }
+    },
 }
 </script>
 

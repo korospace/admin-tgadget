@@ -1,14 +1,17 @@
 <template>
     <div
       id="dashboard-sidebar"
-      class="bg-tgadgety fixed sm:relative bottom-0 z-20 w-full sm:w-36 lg-930:w-52 h-auto sm:h-full sm:flex flex-col rounded-t-md sm:rounded-r-md overflow-hidden" style="box-shadow: 0.5px 0px 8px 0px rgba(0,0,0,0.3);">
-        <LoadingSpinner
-          v-if="loadingOn"
-          :successicon="false"/>
+      class="bg-tgadgety fixed sm:relative bottom-0 z-20 w-full sm:w-36 lg-930:w-52 h-auto sm:h-full sm:flex flex-col rounded-t-md sm:rounded-r-md overflow-hidden" style="font-family: 'Quicksand-Medium';box-shadow: 0.5px 0px 8px 0px rgba(0,0,0,0.3);">
+        
+        <!-- logo t-gadget -->
         <div class="logo-wraper hidden sm:block opacity-80 mb-0 px-10 lg-930:px-16 py-7 border-b border-tgadgety-500">
-            <img :src="logo" alt="">
+            <img :src="require('@/assets/img/logo-t-white.svg')">
         </div>
+
+        <!-- href wraper -->
         <div class="href-wraper w-full flex-1 flex flex-row sm:flex-col overflow-auto">
+            
+            <!-- statistik -->
             <a 
               href="#" 
               v-scroll-to="{
@@ -22,6 +25,8 @@
                 </svg>
                 <h1 class="hidden sm:block flex-1 text-xs lg-930:text-sm tracking-widest capitalize ml-4">statistics</h1>
             </a>
+
+            <!-- event -->
             <a 
             href=""
             @click.prevent="$emit('event-on')" 
@@ -48,6 +53,8 @@
                 </svg>
                 <h1 class="hidden sm:block flex-1 text-xs lg-930:text-sm tracking-widest capitalize ml-4">event</h1>
             </a>
+
+            <!-- product -->
             <a 
               href="#"
               v-scroll-to="{
@@ -70,10 +77,12 @@
                 </svg>
                 <h1 class="hidden sm:block flex-1 text-xs lg-930:text-sm tracking-widest capitalize ml-4">products</h1>
             </a>
+
+            <!-- testimonies -->
             <a 
               href="#"
               v-scroll-to="{
-                el: '#testimonial',
+                el: '#dashboard-testimonies',
                 container: 'main',
               }"
               @click.prevent="" 
@@ -87,10 +96,12 @@
                 </svg>
                 <h1 class="hidden sm:block flex-1 text-xs lg-930:text-sm tracking-widest capitalize ml-4">testimonial</h1>
             </a>
+
+            <!-- banners -->
             <a 
               href="#"
               v-scroll-to="{
-                el: '#banner',
+                el: '#dashboard-banner',
                 container: 'main',
               }"
               class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-6 md:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
@@ -112,6 +123,8 @@
                 </svg>
                 <h1 class="hidden sm:block flex-1 text-xs lg-930:text-sm tracking-widest capitalize ml-4">banner</h1>
             </a>
+
+            <!-- settings -->
             <a 
             href=""
             @click.prevent="$emit('settings-on')" 
@@ -157,9 +170,11 @@
                 </svg>
                 <h1 class="hidden sm:block flex-1 text-xs lg-930:text-sm tracking-widest capitalize ml-4">settings</h1>
             </a>
+
+            <!-- logout -->
             <a 
             href=""
-            @click.prevent="doLogOut()" 
+            @click.prevent="$emit('logout')" 
             class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-6 md:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">
                 <svg class="w-4 lg-930:w-5" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 viewBox="0 0 30.143 30.143" style="enable-background:new 0 0 30.143 30.143;" xml:space="preserve">
@@ -171,9 +186,11 @@
                 </svg>
                 <h1 class="hidden sm:block flex-1 text-xs lg-930:text-sm tracking-widest capitalize ml-4">log out</h1>
             </a>
+
+            <!-- footer -->
             <small class="w-full flex-1 pt-4 pb-4 hidden sm:flex flex-col justify-end items-center text-white opacity-80 text-center">
                 <span>
-                  build with &hearts; by <a :href="mygithub" target="_blank" class="font-extrabold underline">korospace</a>
+                  build with &hearts; by <a href="https://github.com/korospace" target="_blank" class="font-extrabold underline">korospace</a>
                 </span>
             </small>
         </div>
@@ -181,59 +198,11 @@
 </template>
 
 <script>
-import LoadingSpinner from '@/components/LoadingSpinner'
-
 export default {
-    props: ['apiurl'],
-    components: {
-      LoadingSpinner
-    },
-    data(){
-        return{
-            logo     : require('@/assets/img/logo-t-white.svg'),
-            mygithub : 'https://github.com/korospace',
-            loadingOn: false,
-        }
-    },
-    methods: {
-      doLogOut(){
-        this.loadingOn = true;
-        let userdata   = JSON.parse(localStorage.getItem('userdata'));
 
-        this.axios
-          .delete(`${this.$props.apiurl}/user/logout`, {
-            headers: {
-              'api-key': userdata.api_key,
-              "token"  : userdata.token,
-            }
-          })
-          .then((response) => {
-            if(response.status == 202){
-              this.loadingOn = false;
-              localStorage.removeItem('userdata');
-              setTimeout(() => {
-                this.$router.push({name: 'Login'});
-              }, 600);
-            }
-          })
-          .catch((error) => {
-              if(error.response.status == 401){
-                this.loadingOn = false;
-                localStorage.removeItem('userdata');
-                setTimeout(() => {
-                  this.$router.push({name: 'Login'});
-                }, 600);
-              }
-          })
-      },
-    },
-    mounted(){
-    }
 }
 </script>
 
 <style scoped>
-    #dashboard-sidebar{
-        font-family: 'Quicksand-Medium';
-    }
+
 </style>

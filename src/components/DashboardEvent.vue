@@ -2,14 +2,18 @@
     <transition name="fade">
     <div
       id="dashboard-event"
-      class="fixed z-30 top-0 bottom-0 right-0 left-0 flex justify-end py-5 px-5 sm:px-10 overflow-hidden"
-      style="background-color: rgba(0,0,0,0.4)">
+      class="fixed z-30 top-0 bottom-0 right-0 left-0 flex justify-end py-5 px-5 overflow-hidden"
+      style="background-color: rgba(0,0,0,0.4);font-family: 'Quicksand-Medium';">
 
         <transition name="slide" appear>
-        <form @submit.prevent="doEditEvent($event.target)" class="bg-white w-80 flex flex-col rounded-md text-tgadgety">
+        <form
+          @submit.prevent="doEditEvent($event.target)"
+          class="bg-white w-80 flex flex-col rounded-md text-tgadgety">
             
             <!-- header -->
-            <div class="header w-full py-3">
+            <div
+              class="header w-full py-3"
+              style="font-family: 'Quicksand-Regular';border-bottom: 0.2px solid rgba(237, 125, 44, 0.2);">
                 <h1 class="text-center text-tgadgety text-xl capitalize opacity-80">
                     event
                 </h1>
@@ -26,24 +30,33 @@
                       :class="{'opacity-0':dataIsReady==false}">
                 </div>
                 <input 
-                  @change="changePreview($event)"
-                  name="poster" type="file" class="w-full mt-2">
-                <h1 class="line mt-4 mb-2 pt-2 font-extrabold capitalize opacity-80">due date:</h1>
+                  type="file" 
+                  name="poster" 
+                  class="w-full mt-2"
+                  @change="changePreview($event)">
+                <h1
+                  class="line mt-4 mb-2 pt-2 font-extrabold capitalize opacity-80"
+                  style="border-top: 0.2px solid rgba(237, 125, 44, 0.2);">
+                    due date:
+                </h1>
                 <div class="w-full flex">
                     <input
                       v-if="dataIsReady" 
                       @keyup="numFilter(2,$event)"
                       type="number" :value="day" name="day" placeholder="dd" 
-                      class="block w-full px-2 py-1.5 text-tgadgety font-extrabold outline-none rounded-md">
+                      class="block w-full px-2 py-1.5 text-tgadgety font-extrabold outline-none rounded-md"
+                      style="font-family: 'Quicksand-Regular';border: 1.5px solid rgba(237, 125, 44, 0.6);">
                     <input
                       v-if="dataIsReady" 
                       @keyup="numFilter(2,$event)"
                       type="number" :value="month" name="month" placeholder="mm"
-                      class="block w-full px-2 py-1.5 text-tgadgety font-extrabold outline-none rounded-md mx-2">
+                      class="block w-full px-2 py-1.5 text-tgadgety font-extrabold outline-none rounded-md mx-2"
+                      style="font-family: 'Quicksand-Regular';border: 1.5px solid rgba(237, 125, 44, 0.6);">
                     <input
                       v-if="dataIsReady" 
                       @keyup="numFilter(4,$event)"
-                      type="number" :value="year" name="year" placeholder="yyyy" class="block w-full px-2 py-1.5 text-tgadgety font-extrabold outline-none rounded-md">
+                      type="number" :value="year" name="year" placeholder="yyyy" class="block w-full px-2 py-1.5 text-tgadgety font-extrabold outline-none rounded-md"
+                      style="font-family: 'Quicksand-Regular';border: 1.5px solid rgba(237, 125, 44, 0.6);">
                     <div v-if="dataIsReady==false" class="bg-tgadgety-500 w-full h-10 animate-pulse box-border opacity-70 rounded-md"></div>
                     <div v-if="dataIsReady==false" class="bg-tgadgety-500 w-full h-10 animate-pulse box-border opacity-70 rounded-md mx-2"></div>
                     <div v-if="dataIsReady==false" class="bg-tgadgety-500 w-full h-10 animate-pulse box-border opacity-70 rounded-md"></div>
@@ -51,7 +64,9 @@
             </div>
 
             <!-- footer -->
-            <div class="footer w-full flex px-5 py-3">
+            <div
+              class="footer w-full flex px-5 py-3"
+              style="border-top: 0.2px solid rgba(237, 125, 44, 0.2);">
                 <button 
                   class="flex-1 px-3 py-1 border border-tgadgety rounded-sm tracking-widest transition-all text-tgadgety-500 hover:text-tgadgety border-2 border-tgadgety-500 hover:border-tgadgety mr-2" 
                   @click.prevent="$emit('close')">
@@ -74,13 +89,16 @@ export default {
     props: ['apiurl'],
     data() {
         return{
-            dataIsReady : false,
+            dataIsReady : '',
             userdata    : JSON.parse(localStorage.getItem('userdata')),
             poster      : require('@/assets/img/bg-poster.webp'),
             day         : '',
             month       : '',
             year        : '',
         }
+    },
+    mounted(){
+        this.getData();
     },
     methods: {
         getData(){
@@ -106,20 +124,12 @@ export default {
                 }
             })
             .catch((error) => {
+                // Unauthorized
                 if(error.response.status == 401){
-                    // Expired token
-                    if(error.response.data.message == 'expired token'){
-                        setTimeout(() => {
-                            this.$emit('expired-on');
-                        }, 600);
-                    }
-                    // Unauthorized
-                    if(error.response.data.message == 'Unauthorized'){
-                        setTimeout(() => {
-                            localStorage.removeItem('userdata');
-                            this.$router.push({name: 'Login'});
-                        }, 600);
-                    }
+                    setTimeout(() => {
+                        localStorage.removeItem('userdata');
+                        this.$router.push({name: 'Login'});
+                    }, 600);
                 }
                 // Server error
                 if(error.response.status == 500){
@@ -178,6 +188,7 @@ export default {
             }
 
             this.$emit('loading-on',true);
+            this.$emit('loading-msg',"please wait!");
 
             this.axios
             .put(`${this.$props.apiurl}/update/countdown`,formEditPoster, {
@@ -200,14 +211,17 @@ export default {
                 }
             })
             .catch((error) => {
-                this.loadingOn = false;
+                this.$emit('loading-on',false);
 
                 if(error.response.status == 401){
+                    // token expired
                     if(error.response.data.message == 'expired token'){
                         setTimeout(() => {
                             this.$emit('expired-on');
                         }, 600);
                     }
+
+                    // unauthorized
                     if(error.response.data.message == 'Unauthorized'){
                         setTimeout(() => {
                             localStorage.removeItem('userdata');
@@ -216,16 +230,14 @@ export default {
                     }
                 }
                 if(error.response.status == 500){
-                    this.$emit('change-alerttype','danger');
-                    this.$emit('change-alertmsg','<b>Ups, server error!</b> Please try again.');
-                    this.$emit('alerton',true);
+                    this.$emit('alert-on',{
+                        type:'danger',
+                        msg: '<b>Ups, server error!</b> Please try again.'
+                    });
                 }
             })
         }
     },
-    mounted(){
-        this.getData();
-    }
 }
 </script>
 
@@ -257,24 +269,5 @@ export default {
             opacity: 1;
             transform: translateX(0px)
         }
-    }
-
-    #dashboard-event{
-        font-family: 'Quicksand-Medium';
-    }
-
-    #dashboard-event .header{
-        font-family: 'Quicksand-Regular';
-        border-bottom: 0.2px solid rgba(237, 125, 44, 0.2);
-    }
-
-    #dashboard-event .body input[type=number]{
-        font-family: 'Quicksand-Regular';
-        border: 1.5px solid rgba(237, 125, 44, 0.6);
-    }
-
-    #dashboard-event .line,
-    #dashboard-event .footer{
-        border-top: 0.2px solid rgba(237, 125, 44, 0.2);
     }
 </style>

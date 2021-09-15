@@ -62,7 +62,9 @@
             </small>
         </div>
         <div class="formGroup w-full mt-10 px-4 sm:px-8 lg:px-12">
-            <button class="w-full py-3 rounded-md box-border shadow-md text-white sm:hover:bg-tgadgety-500 active:bg-tgadgety-500 transition-all">
+            <button
+              :disabled="isdisabled"
+              class="w-full py-3 rounded-md box-border shadow-md text-white sm:hover:bg-tgadgety-500 active:bg-tgadgety-500 transition-all">
                 <span class="uppercase tracking-widest font-extrabold">
                     {{ (formtype == 'formLogin')? 'login' : 'sign up' }}
                 </span>
@@ -81,7 +83,7 @@
 
 <script>
 export default {
-    props:['formtype','validation']
+    props:['formtype','validation','isdisabled']
 }
 </script>
 

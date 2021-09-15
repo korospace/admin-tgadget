@@ -17,10 +17,16 @@
                 </div>
                 <div
                   class="h-full flex flex-col items-end">
-                    <h1 class="text-white text-xxs sm-400:text-xs lg-930:text-sm text-right capitalize tracking-wide opacity-90">
-                      {{data.name}}
+                    <h1
+                      class="text-white text-xxs sm-400:text-xs lg-930:text-sm text-right capitalize tracking-wide opacity-90"
+                      style="font-family: 'Quicksand-Regular';">
+                        {{data.name}}
                     </h1>
-                    <p class="mt-1 text-white text-lg sm-400:text-2xl sm:text-3xl lg-930:text-5xl opacity-90">{{data.value}}</p>
+                    <p 
+                      class="mt-1 text-white text-lg sm-400:text-2xl sm:text-3xl lg-930:text-5xl opacity-90"
+                      style="font-family: 'Rc-bold';">
+                        {{data.value}}
+                    </p>
                 </div>
             </div>
             <div
@@ -59,13 +65,53 @@
                   style="border: 0.2px solid rgba(255,255,255,0.3);">
             </div>
         </div>
+        <div
+          id="total_product"
+          class="bg-tgadgety-500 h-24 sm-400:h-32 lg-930:h-40 px-4 pt-2 pb-2 sm-400:pb-4 rounded-sm"
+          :class="{'animate-pulse opacity-70':finishGet==false,'shadow-card':finishGet}">
+            <div
+              v-if="finishGet" 
+              class="logo-wraper w-full h-3/5 lg-930:h-4/6 flex justify-between">
+                <div
+                  class="logo h-full mr-0.5 sm-400:mr-2 pb-1 pr-1 box-border">
+                    <img :src="require('@/assets/img/all_product.svg')" class="h-full opacity-20">
+                </div>
+                <div
+                  class="h-full flex flex-col items-end">
+                    <h1
+                      class="text-white text-xxs sm-400:text-xs lg-930:text-sm text-right capitalize tracking-wide opacity-90"
+                      style="font-family: 'Quicksand-Regular';">
+                        total products
+                    </h1>
+                    <p
+                      class="mt-1 text-white text-lg sm-400:text-2xl sm:text-3xl lg-930:text-5xl opacity-90"
+                      style="font-family: 'Rc-bold';">
+                        {{totalproducts}}
+                    </p>
+                </div>
+            </div>
+            <div
+              v-if="finishGet" 
+              class="url-wraper w-full h-2/5 lg-930:h-2/6 flex items-end">
+                <a
+                  href="#" 
+                  v-scroll-to="{
+                    el: '#dashboard-products',
+                    container: 'main',
+                  }"
+                  class="w-full text-white text-xxs sm-400:text-xs lg-930:text-sm opacity-80 hover:opacity-100 active:opacity-100"
+                  style="display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;">
+                  go to <b class="underline">products table</b>
+                </a>
+            </div>
+        </div>
     </form>
 </template>
 
 <script>
 
 export default {
-  props: ['apiurl'],
+  props: ['apiurl','totalproducts'],
   data() {
     return{
       finishGet : false,
@@ -102,12 +148,6 @@ export default {
           value: '',
           url: ''
         },
-        'all_product': {
-          name: 'total products',
-          svg: require('@/assets/img/all_product.svg'),
-          value: '',
-          url: ''
-        }
       }
     }
   },
@@ -128,7 +168,6 @@ export default {
         this.allData.shopee.value      = response.data.data.shopee;
         this.allData.lazada.value      = response.data.data.lazada;
         this.allData.whatsapp.value    = response.data.data.whatsapp;
-        this.allData.all_product.value = response.data.data.all_product;
 
         // Get data socialmedia url
         this.axios
@@ -149,14 +188,14 @@ export default {
         .catch((error) => {
           // Unauthorized
           if(error.response.status == 401){
-            this.$emit('show-alert',{
+            this.$emit('alert-on',{
               type:'danger',
               msg: '<b>failed to get social media url!</b> Please check your api-key.'
             });
           }
           // Server error
           if(error.response.status == 500){
-            this.$emit('show-alert',{
+            this.$emit('alert-on',{
               type:'danger',
               msg: '<b>failed to get social media url!</b> Please refresh page.'
             });
@@ -166,7 +205,7 @@ export default {
       .catch((error) => {
         // Server error
         if(error.response.status == 500){
-          this.$emit('show-alert',{
+          this.$emit('alert-on',{
             type:'danger',
             msg: '<b>failed to get data of visitors!</b> Please refresh page.'
           });
@@ -183,7 +222,7 @@ export default {
         this.userdata.alertSosmedHasBeenShown = true;
         localStorage.setItem('userdata',JSON.stringify(this.userdata));
 
-        this.$emit('show-alert',{
+        this.$emit('alert-on',{
           type:'info',
           msg: 'press <b>enter</b> for save change!'
         });
@@ -206,7 +245,7 @@ export default {
     editSosmed(event){
       // if the number of letters exceeds 255
       if(event.target.value.length > 255){
-        this.$emit('show-alert',{
+        this.$emit('alert-on',{
           type:'danger',
           msg: '<b>failed to update url!</b> max 255 character.'
         });
@@ -218,6 +257,12 @@ export default {
       event.target.previousElementSibling.style.display = '-webkit-box';
       event.target.classList.add('hidden');
       event.target.nextElementSibling.classList.remove('hidden');
+
+      if (event.target.value == '') {
+        event.target.previousElementSibling.innerText = 'not available';   
+      } else {
+        event.target.previousElementSibling.innerText = event.target.value;  
+      }
 
       let formStatistics = event.target.parentElement.parentElement.parentElement;
       formStatistics     = new FormData(formStatistics);
@@ -244,7 +289,7 @@ export default {
         if(error.response.status == 401){
           // Expired token
           if(error.response.data.message == 'expired token'){
-            this.$emit('show-alert',{
+            this.$emit('alert-on',{
               type:'danger',
               msg: '<b>failed to update url!</b> Your session was expired.'
             });
@@ -261,7 +306,7 @@ export default {
         }
         // Server error
         if(error.response.status == 500){
-          this.$emit('show-alert',{
+          this.$emit('alert-on',{
             type:'danger',
             msg: '<b>Ups, server error!</b> Please try again.'
           });
@@ -276,10 +321,5 @@ export default {
 </script>
 
 <style scoped>
-  h1{
-    font-family: 'Quicksand-Regular';
-  }
-  p{
-    font-family: 'Rc-bold';
-  }
+  
 </style>
