@@ -1,9 +1,10 @@
-import Vue           from 'vue'
-import VueRouter     from 'vue-router'
-import Dashboard from '@/views/Dashboard.vue'
-import Login     from '@/views/Login.vue'
-import Register  from '@/views/Register.vue'
-import PageNotFound    from '@/views/PageNotFound.vue'
+import Vue          from 'vue'
+import VueRouter    from 'vue-router'
+import Dashboard    from '@/views/Dashboard.vue'
+import Login        from '@/views/Login.vue'
+import Register     from '@/views/Register.vue'
+import AddProduct   from '@/views/AddProduct.vue'
+import PageNotFound from '@/views/PageNotFound.vue'
 
 Vue.use(VueRouter)
 
@@ -31,6 +32,14 @@ const routes = [
       title : 'sign up'
     },
     component: Register
+  },
+  {
+    path: '/add-product',
+    name: 'AddProduct',
+    meta: {
+      title : 'add product'
+    },
+    component: AddProduct
   },
   {
     path: '*',

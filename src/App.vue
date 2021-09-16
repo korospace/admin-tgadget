@@ -19,7 +19,7 @@ export default {
     titleCheck(){
       let currentTitlePage = document.title.split('|');
       
-      if(/login|sign up/g.test(currentTitlePage[1])){
+      if(/login|sign up|add product/g.test(currentTitlePage[1])){
         return 'slide-fade';
       }
       if(/dashboard|user auth/g.test(currentTitlePage[1])){

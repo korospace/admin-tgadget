@@ -1,16 +1,12 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-// tailwind
-import './assets/tailwind.css'
-// vue scrollto
+import Vue         from 'vue'
+import App         from './App.vue'
+import router      from './router'
 import VueScrollTo from 'vue-scrollto'
-// axios
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-// chart.js
-import Chartkick from 'vue-chartkick'
-import Chart from 'chart.js'
+import axios       from 'axios'
+import VueAxios    from 'vue-axios'
+import Chartkick   from 'vue-chartkick'
+import Chart       from 'chart.js'
+import './assets/tailwind.css'
 
 Vue.config.productionTip = false
 
@@ -26,11 +22,17 @@ Vue.use(VueScrollTo, {
   onCancel: false,
   x: false,
   y: true
-})
+});
 
 Vue.use(VueAxios,axios);
+Vue.use(Chartkick.use(Chart));
 
-Vue.use(Chartkick.use(Chart))
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
+Vue.use(VueQuillEditor)
 
 new Vue({
   router,

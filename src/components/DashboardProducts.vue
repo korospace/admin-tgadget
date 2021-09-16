@@ -16,7 +16,7 @@
                   @keyup="searchProduct($event)">
                 <router-link 
                 class="p-2 rounded-sm tracking-widest transition-all opacity-80 hover:opacity-100 hover:bg-tgadgety active:bg-tgadgety border border-white shadow ml-2"
-                to="">
+                to="/add-product">
                     <img :src="require('@/assets/img/plus.svg')" class="w-4">
                 </router-link>
             </div>
