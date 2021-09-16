@@ -12,7 +12,7 @@
         <LoadingSpinner
           v-if="loadingOn"
           :msg="loadingMsg" 
-          :successicon="successIcon" />
+          :showsuccessicon="showSuccessIcon" />
         
         <!-- API ilustration -->
         <div 
@@ -63,8 +63,8 @@ export default {
             alertMsg       : '',
             alertType      : '',
             loadingOn      : false,
-            successIcon    : false,
-            loadingMsg     : 'please wait',
+            showSuccessIcon    : false,
+                loadingMsg     : 'please wait',
             formDisabled   : false,
             apiIlustration : require('@/assets/img/api-ilustration.webp'),
             formValidation : {
@@ -112,10 +112,12 @@ export default {
                 .post(`${this.$props.apiurl}/user/register`,formLogin)
                 .then((response) => {
                     if(response.data.message == 'user register is success!'){
-                        this.successIcon = true;
-                        this.loadingMsg  = 'check your email!'
+                        this.showSuccessIcon = true;
+                        this.loadingMsg      = 'check your email!'
                         setTimeout(() => {
-                            this.loadingOn = false;
+                            this.loadingOn       = false;
+                            this.showSuccessIcon = false;
+                            this.loadingMsg      = 'please wait!'
                             setTimeout(() => {
                                 this.$router.push({name:'Login'})
                             }, 500);

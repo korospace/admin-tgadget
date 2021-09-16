@@ -101,7 +101,7 @@
             <a 
               href="#"
               v-scroll-to="{
-                el: '#dashboard-banner',
+                el: '#dashboard-banners',
                 container: 'main',
               }"
               class="w-full flex justify-center sm:justify-between items-center pl-0 sm:pl-5 py-6 md:py-4 text-white transition-all hover:bg-tgadgety-500 active:bg-tgadgety-500 border-b border-tgadgety-500 opacity-80 hover:opacity-100 active:opacity-100">

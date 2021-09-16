@@ -13,7 +13,6 @@ export default {
   data() {
     return{
       apiUrl: 'https://t-gadgetcors.herokuapp.com/https://t-gadgetapi.herokuapp.com',
-      // apiUrl: 'http://localhost/t-gadgetapi',
     }
   },
   methods: {

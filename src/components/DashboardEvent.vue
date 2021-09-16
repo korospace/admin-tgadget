@@ -27,7 +27,8 @@
                     <img 
                       :src="poster" 
                       class="w-full" 
-                      :class="{'opacity-0':dataIsReady==false}">
+                      :class="{'opacity-0':dataIsReady==false}"
+                      style="max-width: 280px;min-height: 346px;max-height: 346px;">
                 </div>
                 <input 
                   type="file" 

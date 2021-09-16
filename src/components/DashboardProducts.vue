@@ -109,7 +109,7 @@ export default {
             this.$emit('search-product',event.target.value);
         },
         showPopUpDelete(data){
-            this.$emit('showpopup');
+            this.$emit('showpopupdelete');
             this.$emit('changetargetdelete',data);
         }
     },

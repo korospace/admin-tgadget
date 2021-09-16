@@ -55,7 +55,7 @@
           @event-on="eventOn = true"
           @settings-on="settingOn = true" />
         
-        <main class="bg-white relative z-10 sm:z-20 flex-1 overflow-auto pb-20 sm:pb-0">
+        <main class="bg-white relative z-10 sm:z-20 flex-1 overflow-auto pb-20 sm:pb-10">
           
           <!-- header -->
           <div
@@ -79,21 +79,33 @@
 
           <DashboardProducts 
             :products="allProducts"
-            @showpopup="showPopUpDelete=true" 
-            @changetargetdelete="dataTargetDelete=$event"
-            @search-product="filterProducts($event)" />
+            @search-product="filterProducts($event)"
+            @showpopupdelete="showPopUpDelete=true" 
+            @changetargetdelete="dataTargetDelete=$event" />
 
           <DashboardTestimonies 
             :apiurl="apiurl"
             :testimonies="testimonies"
-            @expired-on="popUpExpiredOn=true"
-            @loading-on="loadingOn=$event"
-            @show-successicon="showSuccessIcon=$event"
-            @loading-msg="loadingMsg=$event"
-            @showpopup="showPopUpDelete=true" 
-            @changetargetdelete="dataTargetDelete=$event"
+            @gettestimonies="getTestimonies()"
             @alert-on="showAlert($event)"
-            @gettestimonies="getTestimonies()" />
+            @loading-on="loadingOn=$event"
+            @loading-msg="loadingMsg=$event"
+            @show-successicon="showSuccessIcon=$event"
+            @expired-on="popUpExpiredOn=true"
+            @showpopupdelete="showPopUpDelete=true" 
+            @changetargetdelete="dataTargetDelete=$event" />
+
+          <DashboardBanners 
+            :apiurl="apiurl"
+            :banners="banners"
+            @getbanners="getBanners()"
+            @alert-on="showAlert($event)"
+            @loading-on="loadingOn=$event"
+            @loading-msg="loadingMsg=$event"
+            @show-successicon="showSuccessIcon=$event"
+            @expired-on="popUpExpiredOn=true"
+            @showpopupdelete="showPopUpDelete=true" 
+            @changetargetdelete="dataTargetDelete=$event" />
         </main>
 
     </div>
@@ -113,6 +125,7 @@ import DashboardVisitors      from '@/components/DashboardVisitors'
 import DashboardProductViewer from '@/components/DashboardProductViewer'
 import DashboardProducts      from '@/components/DashboardProducts'
 import DashboardTestimonies   from '@/components/DashboardTestimonies'
+import DashboardBanners       from '@/components/DashboardBanners'
 import DashboardEvent         from '@/components/DashboardEvent'
 import DashboardSettings      from '@/components/DashboardSettings'
 
@@ -130,6 +143,7 @@ export default {
     DashboardProductViewer,
     DashboardProducts,
     DashboardTestimonies,
+    DashboardBanners,
     DashboardEvent,
     DashboardSettings,
   },
@@ -151,6 +165,7 @@ export default {
       totalProducts  : 0,
       productViewrs  : [],
       testimonies    : [],
+      banners        : [],
       showPopUpDelete  : false,
       dataTargetDelete : '',
     }
@@ -193,6 +208,7 @@ export default {
             this.userName       = this.userdata.username;
             this.getAllProduct();
             this.getTestimonies();
+            this.getBanners();
           }
         })
         .catch((error) => {
@@ -306,6 +322,37 @@ export default {
     updateTestimonies(){
       this.testimonies = this.testimonies.filter(e => e.id != this.dataTargetDelete.id); 
     },
+    getBanners(){
+      this.banners = [];
+
+      this.axios
+        .get(`${this.$props.apiurl}/get/banners`, {
+          headers: {
+            'api-key': this.userdata.api_key,
+          }
+        })
+        .then((response) => {
+          if(response.status == 200){
+            this.banners = response.data.data;
+          }
+        })
+        .catch((error) => {
+          // Product not found
+          if(error.response.status == 404){
+            this.banners = "notfound";
+          }
+          // Server error
+          if(error.response.status == 500){
+            this.showAlert({
+              type: 'danger',
+              msg: '<b>Ups, server bussy!</b> Please refresh page.'
+            });
+          }
+        })
+    },
+    updateBanners(){
+      this.banners = this.banners.filter(e => e.id != this.dataTargetDelete.id); 
+    },
     doDeleteData(){
       this.showPopUpDelete = false;
 
@@ -337,6 +384,7 @@ export default {
                 else {
                   this.updateAllDataProduct();
                   this.updateTestimonies();
+                  this.updateBanners();
                 }
               }, 1000);
             }

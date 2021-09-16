@@ -6,13 +6,13 @@
         <PopUpAddTestimonies
           v-if="showPopUpAddTesti"
           :apiurl="apiurl"
+          @gettestimonies="$emit('gettestimonies')"
           @popuphide="showPopUpAddTesti=false"
           @alert-on="$emit('alert-on',$event)"
-          @expired-on="$emit('expired-on')"
           @loading-on="$emit('loading-on',$event)"
-          @show-successicon="$emit('show-successicon',$event)"
           @loading-msg="$emit('loading-msg',$event)"
-          @gettestimonies="$emit('gettestimonies')" />
+          @show-successicon="$emit('show-successicon',$event)"
+          @expired-on="$emit('expired-on')" />
 
         <h1
           id="title" 
@@ -42,10 +42,10 @@
 
             <!-- testimonies -->
             <div
-              v-for="data of testimonies"
+              v-for="(data,index) of testimonies"
               :key="data.id"
-              class="bg-tgadget min-w-max h-full relative mr-3 rounded-sm overflow-hidden shadow-md"
-              :class="{'hidden':testimonies=='notfound'}">
+              class="bg-tgadget min-w-max h-full relative rounded-sm overflow-hidden shadow-md"
+              :class="{'hidden':testimonies=='notfound','mr-3':(index != testimonies.length-1) ? true : false}">
                 <img
                   :src="data.img"
                   class="w-full h-full opacity-90" >
@@ -84,7 +84,7 @@ export default {
     },
     methods: {
       showPopUpDelete(data){
-        this.$emit('showpopup');
+        this.$emit('showpopupdelete');
         this.$emit('changetargetdelete',data);
       }
     },
