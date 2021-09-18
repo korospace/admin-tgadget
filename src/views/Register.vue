@@ -7,7 +7,7 @@
           v-if="alertOn"
           :msg="alertMsg"
           :type="alertType"
-          @closealert="alertOn=false" />
+          @close="alertOn=false" />
 
         <LoadingSpinner
           v-if="loadingOn"
@@ -111,7 +111,7 @@ export default {
                 this.axios
                 .post(`${this.$props.apiurl}/user/register`,formLogin)
                 .then((response) => {
-                    if(response.data.message == 'user register is success!'){
+                    if(response.status == 201){
                         this.showSuccessIcon = true;
                         this.loadingMsg      = 'check your email!'
                         setTimeout(() => {
@@ -134,9 +134,10 @@ export default {
                         this.formValidation.password = message.password;
                     }
                     if(error.response.status == 500){
-                        this.alertType = 'danger';
-                        this.alertMsg  = '<b>Ups, server error</b>. Please try again!';
-                        this.alertOn   = true;
+                        this.showAlert({
+                            type: 'danger',
+                            msg: '<b>Ups, server error</b>. Please try again!'
+                        });
                     }
                 })
             }

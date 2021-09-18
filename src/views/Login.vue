@@ -7,7 +7,7 @@
           v-if="alertOn"
           :msg="alertMsg"
           :type="alertType"
-          @closealert="alertOn=false" />
+          @close="alertOn=false" />
 
         <LoadingSpinner
           v-if="loadingOn"
@@ -115,13 +115,15 @@ export default {
                 })
                 .catch((error) => {
                     this.loadingOn = false;
-                    
+
                     if(error.response.status == 401){
                         let message = error.response.data.message;
 
                         if(message == 'email not verified'){
-                            this.alertType = 'info';
-                            this.alertMsg  = `<b>e-mail not verified</b>. please check your email`
+                            this.showAlert({
+                              type: 'warning',
+                              msg: '<b>e-mail not verified</b>. please check your email'
+                            });
                         }
                         if(/username/g.test(message)){
                             this.formValidation.username = message;
@@ -131,9 +133,10 @@ export default {
                         }
                     }
                     if(error.response.status == 500){
-                        this.alertType = 'danger';
-                        this.alertMsg  = '<b>Ups, server error</b>. Please try again!';
-                        this.alertOn   = true;
+                        this.showAlert({
+                            type: 'danger',
+                            msg: '<b>Ups, server error</b>. Please try again!'
+                        });
                     }
                 })
             }
