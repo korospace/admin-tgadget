@@ -28,8 +28,8 @@
         
         <div
           id="testimonie-wraper"
-          class="bg-tgadgety-500 h-40 sm-400:h-56 py-4 px-5 mt-2 flex rounded-sm overflow-x-auto"
-          :class="{'animate-pulse opacity-70': testimonies.length==0,'shadow-md': testimonies.length>0,'justify-center items-center text-center':testimonies=='notfound'}"
+          class="bg-tgadgety-500 py-4 px-5 mt-2 flex rounded-sm overflow-x-auto"
+          :class="{'min-h-40 sm-400:min-h-56': testimonies.length==0 || testimonies=='notfound','animate-pulse opacity-70': testimonies.length==0,'shadow-md': testimonies.length>0,'justify-center items-center text-center':testimonies=='notfound'}"
           style="">
             
             <!-- h1 not found -->
@@ -44,17 +44,18 @@
             <div
               v-for="(data,index) of testimonies"
               :key="data.id"
-              class="bg-tgadget min-w-max h-full relative rounded-sm overflow-hidden shadow-md"
+              class="bg-tgadget min-w-max relative rounded-sm overflow-hidden shadow-md"
               :class="{'hidden':testimonies=='notfound','mr-3':(index != testimonies.length-1) ? true : false}">
                 <img
                   :src="data.img"
-                  class="w-full h-full opacity-90" >
+                  class="opacity-90" 
+                  style="width: 344px; height: 180px;">
                 <img
                   :src="require('@/assets/img/garbage-w.svg')"
                   class="w-7 p-1.5 absolute bottom-2 left-2 bg-tgadgety hover:bg-tgadgety-500 active:bg-tgadgety-500 rounded-sm cursor-pointer shadow-md" 
                   @click.prevent="showPopUpDelete({
                     id: data.id,
-                    name: 'testimoni'
+                    name: 'testimony'
                   });" >
             </div>
         </div>

@@ -20,7 +20,8 @@
     "vue-chartkick": "^0.6.1",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.2.0",
-    "vue-scrollto": "^2.20.0"
+    "vue-scrollto": "^2.20.0",
+    "vue2-editor": "^2.10.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

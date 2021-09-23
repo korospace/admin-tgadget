@@ -34,8 +34,8 @@
         
         <div
           id="testimonie-wraper"
-          class="bg-tgadgety-500 h-48 sm-400:h-72 py-4 px-5 mt-2 flex rounded-sm overflow-x-auto"
-          :class="{'animate-pulse opacity-70': banners.length==0,'shadow-md': banners.length>0,'justify-center items-center text-center':banners=='notfound'}"
+          class="bg-tgadgety-500 py-4 px-5 mt-2 flex rounded-sm overflow-x-auto"
+          :class="{'min-h-48 sm-400:min-h-72':banners.length==0 || banners=='notfound','animate-pulse opacity-70': banners.length==0,'shadow-md': banners.length>0,'justify-center items-center text-center':banners=='notfound'}"
           style="">
             
             <!-- h1 not found -->
@@ -55,11 +55,12 @@
                 <img
                   v-if="mode == 'desktop'"
                   :src="data.img_desktop"
-                  class="w-full h-full opacity-90" >
+                  class="w-full h-full opacity-90" 
+                  style="width:1208px;height:302px;">
                 <img
                   v-if="mode == 'mobile'"
-                  :src="data.img_mobile"
-                  class="w-full h-full opacity-90" >
+                  :src="data.img_mobile" 
+                  style="width:500px;height:166px;">
                 <img
                   v-if="mode == 'desktop'"
                   :src="require('@/assets/img/mobile.svg')"

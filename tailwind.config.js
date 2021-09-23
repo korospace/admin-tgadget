@@ -547,6 +547,10 @@ module.exports = {
     }),
     minHeight: {
       0: '0px',
+      40: '10rem',
+      48: '12rem',
+      56: '14rem',
+      72: '18rem',
       full: '100%',
       screen: '100vh',
     },

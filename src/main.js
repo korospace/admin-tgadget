@@ -6,6 +6,7 @@ import axios       from 'axios'
 import VueAxios    from 'vue-axios'
 import Chartkick   from 'vue-chartkick'
 import Chart       from 'chart.js'
+import Vue2Editor  from "vue2-editor";
 import './assets/tailwind.css'
 
 Vue.config.productionTip = false
@@ -26,6 +27,7 @@ Vue.use(VueScrollTo, {
 
 Vue.use(VueAxios,axios);
 Vue.use(Chartkick.use(Chart));
+Vue.use(Vue2Editor);
 
 import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'

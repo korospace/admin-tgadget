@@ -1,9 +1,16 @@
 <template>
     <transition name="fade">
+
     <div
       id="dashboard-settings"
       class="fixed z-30 top-0 bottom-0 right-0 left-0 flex justify-end py-5 px-5 overflow-hidden"
       style="font-family: 'Quicksand-Medium';background-color: rgba(0,0,0,0.4);">
+        
+        <PopUpDelete
+          v-if="showPopUpDelete"
+          @dodelete="doDeleteAccount()"
+          @close="showPopUpDelete=false"
+          targetdelete="account" />
 
         <transition name="slide" appear>
         <div class="bg-white w-96 flex flex-col rounded-md">
@@ -105,14 +112,12 @@
                             * {{ formValidation.new_password }}
                         </small>
                     </div>
-                    <button 
+                    <a
+                      href=""
                       class="mt-7 px-3 py-1 border border-tgadgety rounded-sm tracking-widest transition-all text-tgadgety-500 hover:text-tgadgety border-2 border-tgadgety-500 hover:border-tgadgety mr-2" 
-                      @click.prevent="showPopUpDelete({
-                        id: userdata.user_id,
-                        name: 'account'
-                      });">
+                      @click.prevent="showPopUpDelete = true">
                         delete account
-                    </button>
+                    </a>
                     <button 
                       class="mt-7 px-3 py-1 border border-tgadgety rounded-sm tracking-widest transition-all text-white bg-tgadgety hover:bg-tgadgety-500 hover:border-tgadgety-500">
                         change
@@ -126,12 +131,18 @@
 </template>
 
 <script>
+import PopUpDelete from '@/components/PopUpDelete'
+
 export default {
     props: ['apiurl'],
+    components: {
+        PopUpDelete,
+    },
     data() {
         return{
-            userdata       : JSON.parse(localStorage.getItem('userdata')),
-            formValidation : {
+            showPopUpDelete  : false,
+            userdata         : JSON.parse(localStorage.getItem('userdata')),
+            formValidation   : {
                 new_username: '',
                 new_password: ''
             },
@@ -162,7 +173,7 @@ export default {
                 this.$emit('loading-msg',"please wait!");
 
                 this.axios
-                .put(`${this.$props.apiurl}/user/update`,formEditUser, {
+                .put(`${this.$props.apiurl}/user/edit`,formEditUser, {
                     headers: {
                         'api-key': this.userdata.api_key,
                         "token"  : this.userdata.token,
@@ -218,10 +229,62 @@ export default {
                 })
             }
         },
-        showPopUpDelete(data){
-            this.$emit('showpopupdelete');
-            this.$emit('changetargetdelete',data);
-        }
+        doDeleteAccount(){
+            this.showPopUpDelete = false;
+            
+            setTimeout(() => {
+                this.$emit('loading-on',true);
+                this.$emit('loading-msg',"please wait!");
+            }, 400);
+
+            this.axios
+                .delete(`${this.$props.apiurl}/user/delete`, {
+                    headers: {
+                        'api-key': this.userdata.api_key,
+                        "token"  : this.userdata.token,
+                    }
+                })
+                .then((response) => {
+                    if(response.status == 202){
+                        this.$emit('show-successicon',true);
+                        this.$emit('loading-msg',"delete success!");
+                        
+                        setTimeout(() => {
+                            this.$emit('loading-on',false);
+                            this.$emit('show-successicon',false);
+                            this.$emit('loading-msg',false);
+                            setTimeout(() => {
+                                localStorage.removeItem('userdata');
+                                this.$router.push({name: 'Login'});
+                            }, 400);
+                        }, 1000);
+                    }
+                })
+                .catch((error) => {
+                    this.$emit('loading-on',false);
+
+                    // Expired token AND Unauthorized
+                    if(error.response.status == 401){
+                        if(error.response.data.message == 'expired token'){
+                            setTimeout(() => {
+                                this.$emit('expired-on');
+                            }, 600);
+                        }
+                        if(error.response.data.message == 'Unauthorized'){
+                            setTimeout(() => {
+                                localStorage.removeItem('userdata');
+                                this.$router.push({name: 'Login'});
+                            }, 600);
+                        }
+                    }
+                    if(error.response.status == 500){
+                        this.$emit('alert-on',{
+                            type:'danger',
+                            msg: '<b>Ups, server error!</b> Please try again.'
+                        });
+                    }
+                })
+        },
     },
 }
 </script>

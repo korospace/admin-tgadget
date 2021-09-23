@@ -244,13 +244,13 @@ export default {
     },
     editSosmed(event){
       // if the number of letters exceeds 255
-      if(event.target.value.length > 255){
+      if(event.target.value.length > 250){
         this.$emit('alert-on',{
           type:'danger',
           msg: '<b>failed to update url!</b> max 255 character.'
         });
 
-        event.target.value = event.target.value.slice(0,255);
+        event.target.value = event.target.value.slice(0,250);
         return 0;
       }
 
@@ -286,8 +286,10 @@ export default {
         }
       })
       .catch((error) => {
+        this.getDataStatistics();
+
+        // Expired token AND Unauthorized
         if(error.response.status == 401){
-          // Expired token
           if(error.response.data.message == 'expired token'){
             this.$emit('alert-on',{
               type:'danger',
@@ -298,7 +300,6 @@ export default {
               this.$emit('expiredon');
             }, 600);
           }
-          // Unauthorized
           if(error.response.data.message == 'Unauthorized'){
             localStorage.removeItem('userdata');
             this.$router.push({name: 'Login'});

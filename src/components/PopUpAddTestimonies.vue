@@ -81,9 +81,10 @@ export default {
 
             let formTesti = new FormData(form);
             this.$emit('loading-on',true);
+            this.$emit('loading-msg',"please wait");
 
             this.axios
-            .post(`${this.$props.apiurl}/add/testimoni`,formTesti, {
+            .post(`${this.$props.apiurl}/add/testimony`,formTesti, {
                 headers: {
                     'api-key': this.userdata.api_key,
                     "token"  : this.userdata.token,
@@ -92,7 +93,7 @@ export default {
             .then((response) => {
                 if(response.status == 201){
                     this.$emit('show-successicon',true);
-                    this.$emit('loading-msg',"update success!");
+                    this.$emit('loading-msg',"upload success!");
                     this.$emit('gettestimonies');
 
                     setTimeout(() => {

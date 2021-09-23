@@ -271,13 +271,15 @@ export default {
     updateAllDataProduct(data = null){
       if (data == null) {
         this.allProducts = this.userdata.products.filter(e => e.id != this.dataTargetDelete.id); 
+        if(this.allProducts.length==0){
+          this.allProducts = "notfound";
+        }
       } else {
         this.allProducts = data;
       }
-      this.totalProducts     = this.allProducts.length;
+      this.totalProducts     = (this.allProducts=="notfound") ? 0 : this.allProducts.length;
       this.productViewrs     = this.allProducts;
       this.userdata.products = this.allProducts;
-      localStorage.setItem('userdata',JSON.stringify(this.userdata));
     },
     filterProducts(data){
       let arrProducts  = this.userdata.products;
@@ -321,6 +323,9 @@ export default {
     },
     updateTestimonies(){
       this.testimonies = this.testimonies.filter(e => e.id != this.dataTargetDelete.id); 
+      if (this.testimonies.length == 0) {
+        this.testimonies = 'notfound';
+      }
     },
     getBanners(){
       this.banners = [];
@@ -352,6 +357,9 @@ export default {
     },
     updateBanners(){
       this.banners = this.banners.filter(e => e.id != this.dataTargetDelete.id); 
+      if (this.banners.length == 0) {
+        this.banners = 'notfound';
+      }
     },
     doDeleteData(){
       this.showPopUpDelete = false;
@@ -381,9 +389,13 @@ export default {
                   localStorage.removeItem('userdata');
                   this.$router.push({name: 'Login'});
                 }
-                else {
+                else if (this.dataTargetDelete.name == 'product') {
                   this.updateAllDataProduct();
+                }
+                else if (this.dataTargetDelete.name == 'testimony') {
                   this.updateTestimonies();
+                }
+                else {
                   this.updateBanners();
                 }
               }, 1000);

@@ -21,7 +21,7 @@
               :class="{'ring-2 ':validation.email,'ring-red-600':validation.email}">
             <small 
               v-if="validation.email"
-              class="absolute left-8 lg:left-12 -bottom-6 text-red-700 tracking-wide">
+              class="absolute left-4 sm:left-8 lg:left-12 -bottom-6 text-red-700 tracking-wide">
                 * {{ validation.email }}
             </small>
         </div>
@@ -39,7 +39,7 @@
               :class="{'ring-2 ':validation.username,'ring-red-600':validation.username}">
             <small 
               v-if="validation.username"
-              class="absolute left-8 lg:left-12 -bottom-6 text-red-700 tracking-wide">
+              class="absolute left-4 sm:left-8 lg:left-12 -bottom-6 text-red-700 tracking-wide">
                 * {{ validation.username }}
             </small>
         </div>
@@ -57,7 +57,7 @@
               :class="{'ring-2 ':validation.password,'ring-red-600':validation.password}">
             <small 
               v-if="validation.password"
-              class="absolute left-8 lg:left-12 -bottom-6 text-red-700 tracking-wide">
+              class="absolute left-4 sm:left-8 lg:left-12 -bottom-6 text-red-700 tracking-wide">
                 * {{ validation.password }}
             </small>
         </div>

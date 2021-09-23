@@ -32,7 +32,7 @@
                 <img
                   :src="previewDesktop"
                   class="w-full rounded-sm shadow-card"
-                  style="max-width: 416px;max-height: 104px;" >
+                  style="min-width: 416px;max-width: 416px;max-height: 104px;" >
                 <input 
                   @change="changePreview($event)"
                   name="banner_desktop" type="file" class="w-full mt-3 text-tgadgety opacity-80 text-xs sm:text-md">
@@ -44,7 +44,7 @@
                 <img
                   :src="previewMobile"
                   class="w-1/2 rounded-sm shadow-card"
-                  style="max-width: 208px;max-height: 70px;" >
+                  style="max-width: 208px;max-width: 208px;max-height: 70px;" >
                 <input 
                   @change="changePreview($event)"
                   name="banner_mobile" type="file" class="w-full mt-3 text-tgadgety opacity-80 text-xs sm:text-md">
@@ -113,6 +113,7 @@ export default {
             }
 
             this.$emit('loading-on',true);
+            this.$emit('loading-msg',"please wait");
 
             this.axios
             .post(`${this.$props.apiurl}/add/banner`,formBanner, {
@@ -124,7 +125,7 @@ export default {
             .then((response) => {
                 if(response.status == 201){
                     this.$emit('show-successicon',true);
-                    this.$emit('loading-msg',"update success!");
+                    this.$emit('loading-msg',"upload success!");
                     this.$emit('getbanners');
 
                     setTimeout(() => {

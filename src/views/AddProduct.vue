@@ -32,7 +32,9 @@
 
     <!-- form -->
     <FormAddUpdateProduct
+      :apiurl="apiurl"
       @alert-on="showAlert($event)"
+      @expired-on="popUpExpiredOn=true"
       @senddataform="doAddProduct($event)" />
         
   </div>
@@ -46,7 +48,7 @@ import PopUpExpired         from '@/components/PopUpExpired'
 import FormAddUpdateProduct from '@/components/FormAddUpdateProduct'
 
 export default {
-  name: 'Dashboard',
+  name: 'AddProduct',
   props:['apiurl'],
   components: {
     Alert,

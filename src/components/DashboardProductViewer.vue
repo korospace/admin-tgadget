@@ -4,9 +4,9 @@
       class="w-full flex mt-5 px-5"
       :class="{'h-80': products.length==0}">
         <div
-          class="bg-tgadgety-500 w-full relative pt-4 pl-4 pb-3 rounded-sm overflow-auto"
+          class="bg-tgadgety-500 w-full relative pt-4 pl-4 pb-3 flex rounded-sm overflow-auto"
           :class="{'h-full animate-pulse opacity-70': products.length==0,'shadow-card': products.length>0,}">
-            <div class="absolute top-0 bottom-0 flex items-center">
+            <div class="w-6 flex items-center">
               <small
                 v-if="products.length>0"
                 class="title text-white text-base capitalize tracking-widest transform -rotate-90 -translate-x-6 -translate-y-4 opacity-60">
@@ -14,9 +14,9 @@
               </small>
             </div>
             <column-chart
-              :class="{'ml-5':products=='notfound'}"
               v-if="products.length>0"
               :width="chartWidth"
+              style="min-width: 100%;"
               :dataset="{borderWidth: 1}"
               :min="0" :max="maxViewer"
               :data="dataViewers">

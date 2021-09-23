@@ -133,39 +133,117 @@
             </div>
         </div>
 
-        <!-- deskripsi -->
+        <!-- deskripsi AND categories -->
         <div
           class="form-group w-full flex flex-col sm:flex-row justify-around items-start mb-1"
           style="font-family: 'Quicksand-Regular';">
-            <div class="input-wraper w-full sm:w-auto sm:flex-1 px-2">
+            <div
+              class="input-wraper w-full sm:w-auto sm:flex-1 px-2">
                 <label
                 class="text-tgadgety capitalize opacity-80 text-sm italic"
                 style="font-family: 'Quicksand-SemiBold';">deskription</label>
-                <div class="bg-tgadgety-500 rounded-md overflow-hidden">
-                    <quill-editor
-                    class=""
-                    ref="myQuillEditor"
-                    />
-                </div> 
+                <vue-editor
+                  v-model="contentDeskripsi" 
+                  :editor-toolbar="customToolbar"
+                  style="max-height: 16rem; overflow: auto;"
+                  class="bg-tgadgety-500 rounded-md overflow-hidden border-none shadow-md" />
                 <span
                   v-text="validator.deskripsi"
                   class="h-5 flex items-end text-xs text-red-700">
-
                 </span>
             </div>
             <div
               class="input-wraper w-full sm:w-auto sm:flex-1 px-2">
                 <label
-                  for="linkwa"
+                  for="kategori"
                   class="text-tgadgety capitalize opacity-80 text-sm italic"
-                  style="font-family: 'Quicksand-SemiBold';">whatsapp link</label>
+                  style="font-family: 'Quicksand-SemiBold';">categories</label>
                 <input
-                  id="linkwa"
+                  id="kategori"
                   type="text"
-                  name="linkwa"
+                  name="kategori"
+                  placeholder="select in the box below"
+                  v-model="categoryValue"
+                  class="bg-tgadgety-500 w-full px-3 py-2 text-white outline-none box-border rounded-sm shadow-md opacity-90 focus:opacity-100"
+                  disabled>
+                <div
+                  class="w-full mt-2 p-2 flex flex-col rounded-b-md bg-tgadgety"
+                  style="height: 12.5rem;">
+                    <form
+                      @submit.prevent="addCategory()"
+                      class="flex">
+                        <input
+                          id="add-categories"
+                          type="text"
+                          placeholder="add category"
+                          autocomplete="off"
+                          v-model="addCategoryValue"
+                          @keyup="charFilter(20,$event)"
+                          class="w-40 px-1.5 py-0.5 text-tgadgety rounded-sm outline-none shadow">
+                        <button 
+                          class="p-1 rounded-sm tracking-widest transition-all opacity-80 hover:opacity-100 hover:bg-tgadgety active:bg-tgadgety border border-white shadow ml-2"
+                          :disabled="addCategoryValue == ''">
+                            <img :src="require('@/assets/img/plus.svg')" class="w-4">
+                        </button>
+                    </form>
+                    <div
+                      class="flex-1 mt-4 overflow-auto">
+                        <div
+                          v-for="x of [1,2,3]"
+                          :key="x.id"
+                          class="w-full px-2 py-4 text-white border-b border-tgadgety-500 hover:bg-tgadgety-500 cursor-pointer"
+                          :class="{'hidden':categories.length>0}">
+                            <span class="block w-3/5 h-2 bg-white animate-pulse rounded-lg"></span>
+                        </div>
+                        <div
+                          v-for="c of categories"
+                          :key="c.id"
+                          class="w-full p-2 flex justify-between text-white border-b border-tgadgety-500 hover:bg-tgadgety-500 cursor-pointer"
+                          :class="{'hidden':categories=='notfound'}">
+                            <div
+                              @click="categoryValue = c.category_name;"
+                              class="flex-1 flex items-center">
+                                <span>{{c.category_name}}</span>
+                                <transition name="bounce" appear>
+                                <img
+                                  v-if="categoryValue == c.category_name"
+                                  :src="require('@/assets/img/check.svg')"
+                                  class="w-4 p-1 ml-2 bg-white opacity-80 rounded-full" >
+                                </transition>
+                            </div>
+                            <img
+                              :src="require('@/assets/img/garbage.svg')"
+                              class="w-7 p-1.5 bg-white opacity-80 hover:opacity-100 active:bg-tgadgety-500 rounded-sm cursor-pointer shadow-md" 
+                              @click="deleteCategory(c);" >
+                        </div>
+                        <div
+                          class="w-full h-full flex justify-center items-center text-white opacity-80"
+                          :class="{'hidden':categories!='notfound'}"
+                          style="font-family: 'Rc-bold';">
+                            category not found
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- keywords -->
+        <div
+          class="form-group w-full flex flex-col sm:flex-row justify-around items-start mb-1"
+          style="font-family: 'Quicksand-Regular';">
+            <div class="input-wraper w-full sm:w-auto sm:flex-1 px-2">
+                <label
+                  for="keyword"
+                  class="text-tgadgety capitalize opacity-80 text-sm italic"
+                  style="font-family: 'Quicksand-SemiBold';">keywords</label>
+                <input
+                  id="keyword"
+                  type="text"
+                  name="keyword"
+                  placeholder="keyword_1|keyword_2|keyword_3"
                   class="bg-tgadgety-500 w-full px-3 py-2 text-white outline-none box-border rounded-sm shadow-md opacity-90 focus:opacity-100">
                 <span
-                  v-text="'tes price validator'"
+                  v-text="validator.keyword"
                   class="h-5 flex items-end text-xs text-red-700">
 
                 </span>
@@ -184,42 +262,228 @@
 <script>
 
 export default {
-    data() {
-        return{
-            validator : {},
-            imgProduct: require('@/assets/img/bg-img-product.webp')
-        }
+  props:['apiurl'],
+  data() {
+    return{
+      validator        : {},
+      imgProduct       : require('@/assets/img/bg-img-product.webp'),
+      userdata         : JSON.parse(localStorage.getItem('userdata')),
+      categories       : [],
+      categoryValue    : '',
+      addCategoryValue : '',
+      contentDeskripsi : "",
+      customToolbar: [
+        ["bold", "italic", "underline"],
+        [{ list: "ordered" }, { list: "bullet" }],
+      ]
+    }
+  },
+  methods: {
+    charFilter(max,event){
+      event.target.value = event.target.value.slice(0,max);
     },
-    methods: {
-        changePreview(event){
-            // If file is not image
-            if(!/image/.test(event.target.files[0].type)){
-                this.$emit('alert-on',{
-                    type: 'danger',
-                    msg: '<b>upload failed!</b> file is not image.'
-                });
-                event.target.value = "";
-                return false;
-            }
-            // If file size more than 200kb
-            else if(event.target.files[0].size > 200000){
-                this.$emit('alert-on',{
-                    type: 'danger',
-                    msg: '<b>upload failed!</b> file more than 200kb.'
-                });
-                event.target.value = "";
-                return false;
-            }
-            else{
-                this.imgProduct = URL.createObjectURL(event.target.files[0]);
-            }
-        },
-        sendDataForm(form){
-            console.log(form);
-        }
+    changePreview(event){
+      // If file is not image
+      if(!/image/.test(event.target.files[0].type)){
+        this.$emit('alert-on',{
+          type: 'danger',
+          msg: '<b>upload failed!</b> file is not image.'
+        });
+        event.target.value = "";
+        return false;
+      }
+      // If file size more than 200kb
+      else if(event.target.files[0].size > 200000){
+        this.$emit('alert-on',{
+          type: 'danger',
+          msg: '<b>upload failed!</b> file more than 200kb.'
+        });
+        event.target.value = "";
+        return false;
+      }
+      else{
+        this.imgProduct = URL.createObjectURL(event.target.files[0]);
+      }
     },
+    getCategories(){
+      this.categories = [];
+
+      this.axios
+        .get(`${this.$props.apiurl}/get/categories`, {
+          headers: {
+            'api-key': this.userdata.api_key,
+          }
+        })
+        .then((response) => {
+          if(response.status == 200){
+            this.categories = response.data.data;
+          }
+        })
+        .catch((error) => {
+          // Product not found
+          if(error.response.status == 404){
+            this.categories = "notfound";
+          }
+          // Server error
+          if(error.response.status == 500){
+            this.$emit('alert-on',{
+              type: 'danger',
+              msg: '<b>Failed load categories!</b> Please refresh page.'
+            });
+          }
+        })
+    },
+    addCategory(){
+      let newCategory     = this.addCategoryValue.trim().toLowerCase();
+      let formAddCategory = new FormData();
+      formAddCategory.append('category_name',newCategory);
+
+      // change string to array
+      if (this.categories == 'notfound') {
+        this.categories = [];
+      }
+
+      // if category is exist
+      let isExist = this.categories.find(e => e.category_name == newCategory);
+      if (isExist) {
+        this.$emit('alert-on',{
+          type:'danger',
+          msg: `<b>add category failed!</b> '${newCategory}' is exist`
+        });
+        return 0;
+      }
+
+      this.categories.unshift({category_name:newCategory});
+      this.addCategoryValue = '';
+
+      this.axios
+        .post(`${this.$props.apiurl}/add/category`,formAddCategory, {
+          headers: {
+            'api-key': this.userdata.api_key,
+            "token"  : this.userdata.token,
+          }
+        })
+        .then((response) => {
+          if(response.status == 201){
+            this.getCategories();
+          }
+        })
+        .catch((error) => {
+          // undo
+          this.categories = this.categories.filter(e => e.category_name != newCategory);
+
+          // show alert
+          this.$emit('alert-on',{
+            type:'danger',
+            msg: '<b>add category failed!</b> Please try again.'
+          });
+
+          if(error.response.status == 401){
+              if(error.response.data.message == 'expired token'){
+                setTimeout(() => {
+                  this.$emit('expired-on');
+                }, 600);
+              }
+              if(error.response.data.message == 'Unauthorized'){
+                setTimeout(() => {
+                  localStorage.removeItem('userdata');
+                  this.$router.push({name: 'Login'});
+                }, 600);
+              }
+          }
+        })
+    },
+    deleteCategory(data){
+
+      let oldCategories = this.categories;
+      this.categories   = this.categories.filter(e => e.category_name != data.category_name);
+
+      if (this.categoryValue == data.category_name) {
+        this.categoryValue = '';
+      }
+      if (this.categories.length == 0) {
+        this.categories = 'notfound';
+      }
+
+      this.axios
+        .delete(`${this.$props.apiurl}/delete/category?id=${data.id}`,{
+          headers: {
+            'api-key': this.userdata.api_key,
+            "token"  : this.userdata.token,
+          }
+        })
+        .then(() => {
+          // do nothing
+        })
+        .catch((error) => {
+          // undo
+          this.categories = oldCategories;
+
+          // show alert
+          this.$emit('alert-on',{
+            type:'danger',
+            msg: '<b>delete category failed!</b> Please try again.'
+          });
+
+          if(error.response.status == 401){
+            // Expired token & Unauthorized
+            if(error.response.data.message == 'expired token'){
+              setTimeout(() => {
+                this.$emit('expired-on');
+              }, 600);
+            }
+            if(error.response.data.message == 'Unauthorized'){
+              setTimeout(() => {
+                localStorage.removeItem('userdata');
+                this.$router.push({name: 'Login'});
+              }, 600);
+            }
+          }
+        })
+    },
+    sendDataForm(form){
+      console.log(form);
+    }
+  },
+  mounted(){
+    this.getCategories();
+  },
 }
 </script>
 
 <style scoped>
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: rgba(255, 255, 255, 0.4); /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: rgba(255, 255, 255, 0.4);
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: rgba(255, 255, 255, 0.4);
+}
+
+#add-categories::placeholder { 
+  color: rgba(237, 125, 44, 0.4); /* Firefox */
+}
+
+
+.bounce-enter-active{
+  animation: bounce .3s;
+}
+.bounce-leave-active{
+  animation: bounce .2s reverse;
+}
+@keyframes bounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.75);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 </style>
