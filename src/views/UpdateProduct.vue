@@ -1,6 +1,6 @@
 <template>
   <div
-    id="add-product" 
+    id="update-product" 
     class="bg-white w-screen h-screen overflow-auto">
 
     <UserSessionCheck
@@ -36,8 +36,9 @@
     </div>
 
     <!-- form -->
-    <FormAddProduct
+    <FormUpdateProduct
       :apiurl="apiurl"
+      :productid="$route.query.id"
       @alert-on="showAlert($event)"
       @expired-on="popUpExpiredOn=true"
       @loading-on="loadingOn=$event"
@@ -53,17 +54,17 @@ import UserSessionCheck     from '@/components/UserSessionCheck'
 import Alert                from '@/components/Alert'
 import LoadingSpinner       from '@/components/LoadingSpinner'
 import PopUpExpired         from '@/components/PopUpExpired'
-import FormAddProduct from '@/components/FormAddProduct'
+import FormUpdateProduct    from '@/components/FormUpdateProduct'
 
 export default {
-  name: 'AddProduct',
+  name: 'UpdateProduct',
   props:['apiurl'],
   components: {
     UserSessionCheck,
     Alert,
     LoadingSpinner,
     PopUpExpired,
-    FormAddProduct
+    FormUpdateProduct
   },
   data(){
     return{
@@ -75,6 +76,7 @@ export default {
       showSuccessIcon: false,
       popUpExpiredOn : false,
       userdata       : JSON.parse(localStorage.getItem('userdata')),
+      detailProduct  : '',
     }
   },
   beforeRouteEnter(to, from, next) {

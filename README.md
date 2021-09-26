@@ -1,24 +1,13 @@
-# t-admin
+# T-Gadgetid Admin Page
+This is a website that I created as GUI for manage my rest API at  https://github.com/korospace/api-tgadget
 
-## Project setup
-```
-npm install
-```
+## 1. Tools & Stack
+- [x] vuejs
+- [x] Tailwind
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## 2. Preview
+Live Demo Can access at <a href="https://t-gadgetadmin.netlify.app/">https://t-gadgetadmin.netlify.app/</a> <br><br>
 
-### Compiles and minifies for production
-```
-npm run build
-```
+> <img src="src/asset/screenshoot/desktop2.webp" width="860px" /><br><br>
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+> <img src="src/asset/screenshoot/desktop1.webp" width="860px" /><br><br>

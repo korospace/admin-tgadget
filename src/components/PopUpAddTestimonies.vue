@@ -7,7 +7,8 @@
         <transition name="bounce" appear>
         <form 
           @submit.prevent="doAddTesti($event.target);"
-          class="bg-white max-w-md flex flex-col rounded-md shadow-md overflow-hidden">
+          class="bg-white max-w-md flex flex-col rounded-md shadow-md overflow-hidden"
+          style="width: 420px;">
             
             <!-- header -->
             <div
@@ -92,6 +93,8 @@ export default {
             })
             .then((response) => {
                 if(response.status == 201){
+                    form[0].value   = '';
+                    this.imgPreview = require('@/assets/img/bg-testimoni.webp')
                     this.$emit('show-successicon',true);
                     this.$emit('loading-msg',"upload success!");
                     this.$emit('gettestimonies');

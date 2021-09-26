@@ -818,6 +818,7 @@ module.exports = {
     }),
     zIndex: {
       auto: 'auto',
+      '1min': '-1',
       0: '0',
       10: '10',
       20: '20',

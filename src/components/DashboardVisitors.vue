@@ -109,7 +109,6 @@
 </template>
 
 <script>
-
 export default {
   props: ['apiurl','totalproducts'],
   data() {
@@ -157,33 +156,49 @@ export default {
 
       // Get data visitors
       this.axios
-      .get(`${this.$props.apiurl}/get/statistics`, {
-        headers: {
-          'api-key': this.userdata.api_key,
-        }
-      })
-      .then((response) => {
-        this.allData.ourwebsite.value  = response.data.data.ourwebsite;
-        this.allData.tokopedia.value   = response.data.data.tokopedia;
-        this.allData.shopee.value      = response.data.data.shopee;
-        this.allData.lazada.value      = response.data.data.lazada;
-        this.allData.whatsapp.value    = response.data.data.whatsapp;
-
-        // Get data socialmedia url
-        this.axios
-        .get(`${this.$props.apiurl}/get/socialmedia`, {
+        .get(`${this.$props.apiurl}/get/statistics`, {
           headers: {
             'api-key': this.userdata.api_key,
           }
         })
         .then((response) => {
-          this.allData.ourwebsite.url  = response.data.data.ourwebsite;
-          this.allData.tokopedia.url   = response.data.data.tokopedia;
-          this.allData.shopee.url      = response.data.data.shopee;
-          this.allData.lazada.url      = response.data.data.lazada;
-          this.allData.whatsapp.url    = response.data.data.whatsapp;
-          
-          this.finishGet  = true;
+          this.allData.ourwebsite.value  = response.data.data.ourwebsite;
+          this.allData.tokopedia.value   = response.data.data.tokopedia;
+          this.allData.shopee.value      = response.data.data.shopee;
+          this.allData.lazada.value      = response.data.data.lazada;
+          this.allData.whatsapp.value    = response.data.data.whatsapp;
+
+          // Get data socialmedia url
+          this.axios
+            .get(`${this.$props.apiurl}/get/socialmedia`, {
+              headers: {
+                'api-key': this.userdata.api_key,
+              }
+            })
+            .then((response) => {
+              this.allData.ourwebsite.url  = response.data.data.ourwebsite;
+              this.allData.tokopedia.url   = response.data.data.tokopedia;
+              this.allData.shopee.url      = response.data.data.shopee;
+              this.allData.lazada.url      = response.data.data.lazada;
+              this.allData.whatsapp.url    = response.data.data.whatsapp;
+              this.finishGet               = true;
+            })
+            .catch((error) => {
+              // Unauthorized
+              if(error.response.status == 401){
+                this.$emit('alert-on',{
+                  type:'danger',
+                  msg: '<b>failed to get social media url!</b> Please check your api-key.'
+                });
+              }
+              // Server error
+              if(error.response.status == 500){
+                this.$emit('alert-on',{
+                  type:'danger',
+                  msg: '<b>failed to get social media url!</b> Please refresh page.'
+                });
+              }
+            })
         })
         .catch((error) => {
           // Unauthorized
@@ -197,50 +212,39 @@ export default {
           if(error.response.status == 500){
             this.$emit('alert-on',{
               type:'danger',
-              msg: '<b>failed to get social media url!</b> Please refresh page.'
+              msg: '<b>failed to get data of visitors!</b> Please refresh page.'
             });
           }
         })
-      })
-      .catch((error) => {
-        // Server error
-        if(error.response.status == 500){
-          this.$emit('alert-on',{
-            type:'danger',
-            msg: '<b>failed to get data of visitors!</b> Please refresh page.'
-          });
-        }
-      })
     },
     showInput(event){
-      setTimeout(() => {
-        this.windowOnClick(event.target.previousElementSibling);
-      }, 0);
-
-      // Has the information been displayed?
-      if(this.userdata.alertSosmedHasBeenShown == undefined){
-        this.userdata.alertSosmedHasBeenShown = true;
-        localStorage.setItem('userdata',JSON.stringify(this.userdata));
-
-        this.$emit('alert-on',{
-          type:'info',
-          msg: 'press <b>enter</b> for save change!'
-        });
-      }
-
+      this.showInfo();
       event.target.classList.add('hidden');
       event.target.previousElementSibling.classList.remove('hidden');
       event.target.previousElementSibling.select();
       event.target.previousElementSibling.previousElementSibling.style.display = 'none';
+
+      setTimeout(() => {
+        let inputEl = event.target.previousElementSibling;
+
+        window.addEventListener('click',(e) => {
+          if(!e.target.classList.contains('input_link_sosmed')&&!e.target.classList.contains('edit_logo')){
+            inputEl.previousElementSibling.style.display = '-webkit-box';
+            inputEl.classList.add('hidden');
+            inputEl.nextElementSibling.classList.remove('hidden');
+          }
+        })
+      }, 0);
     },
-    windowOnClick(inputEl){
-      window.addEventListener('click',(e) => {
-        if(!e.target.classList.contains('input_link_sosmed')&&!e.target.classList.contains('edit_logo')){
-          inputEl.previousElementSibling.style.display = '-webkit-box';
-          inputEl.classList.add('hidden');
-          inputEl.nextElementSibling.classList.remove('hidden');
-        }
-      })
+    showInfo(){
+      this.$emit('alert-on',{
+        type:'info',
+        msg: 'press <b>enter</b> for save change!'
+      });
+
+      setTimeout(() => {
+        this.$emit('alert-off');
+      }, 5000);
     },
     editSosmed(event){
       // if the number of letters exceeds 255
@@ -258,61 +262,60 @@ export default {
       event.target.classList.add('hidden');
       event.target.nextElementSibling.classList.remove('hidden');
 
+      let formStatistics = event.target.parentElement.parentElement.parentElement;
+      formStatistics     = new FormData(formStatistics);
+
+      // if input is empty
       if (event.target.value == '') {
         event.target.previousElementSibling.innerText = 'not available';   
       } else {
         event.target.previousElementSibling.innerText = event.target.value;  
       }
-
-      let formStatistics = event.target.parentElement.parentElement.parentElement;
-      formStatistics     = new FormData(formStatistics);
+      // if input is empty
       for(var pair of formStatistics.entries()) {
-        // If input value is empty
         if(pair[1] == ""){
           formStatistics.set(pair[0], 'not available');
         }
       }
 
       this.axios
-      .put(`${this.$props.apiurl}/update/socialmedia`,formStatistics, {
-        headers: {
-          'api-key': this.userdata.api_key,
-          "token"  : this.userdata.token,
-        }
-      })
-      .then((response) => {
-        if(response.status == 201){
+        .put(`${this.$props.apiurl}/update/socialmedia`,formStatistics, {
+          headers: {
+            'api-key': this.userdata.api_key,
+            "token"  : this.userdata.token,
+          }
+        })
+        .then(() => {
+          
+        })
+        .catch((error) => {
           this.getDataStatistics();
-        }
-      })
-      .catch((error) => {
-        this.getDataStatistics();
 
-        // Expired token AND Unauthorized
-        if(error.response.status == 401){
-          if(error.response.data.message == 'expired token'){
+          // Expired token AND Unauthorized
+          if(error.response.status == 401){
+            if(error.response.data.message == 'expired token'){
+              this.$emit('alert-on',{
+                type:'danger',
+                msg: '<b>failed to update url!</b> Your session was expired.'
+              });
+
+              setTimeout(() => {
+                this.$emit('expired-on');
+              }, 600);
+            }
+            if(error.response.data.message == 'Unauthorized'){
+              localStorage.removeItem('userdata');
+              this.$router.push({name: 'Login'});
+            }
+          }
+          // Server error
+          if(error.response.status == 500){
             this.$emit('alert-on',{
               type:'danger',
-              msg: '<b>failed to update url!</b> Your session was expired.'
+              msg: '<b>Ups, server error!</b> Please try again.'
             });
-
-            setTimeout(() => {
-              this.$emit('expiredon');
-            }, 600);
           }
-          if(error.response.data.message == 'Unauthorized'){
-            localStorage.removeItem('userdata');
-            this.$router.push({name: 'Login'});
-          }
-        }
-        // Server error
-        if(error.response.status == 500){
-          this.$emit('alert-on',{
-            type:'danger',
-            msg: '<b>Ups, server error!</b> Please try again.'
-          });
-        }
-      })
+        })
     }
   },
   mounted(){

@@ -7,7 +7,8 @@
         <transition name="bounce" appear>
         <form 
           @submit.prevent="doAddBanner($event.target);"
-          class="bg-white max-w-md flex flex-col rounded-md shadow-md overflow-hidden">
+          class="bg-white max-w-md flex flex-col rounded-md shadow-md overflow-hidden"
+          style="width: 420px;">
             
             <!-- header -->
             <div
@@ -32,7 +33,7 @@
                 <img
                   :src="previewDesktop"
                   class="w-full rounded-sm shadow-card"
-                  style="min-width: 416px;max-width: 416px;max-height: 104px;" >
+                  style="max-width: 416px;max-height: 104px;" >
                 <input 
                   @change="changePreview($event)"
                   name="banner_desktop" type="file" class="w-full mt-3 text-tgadgety opacity-80 text-xs sm:text-md">
@@ -44,7 +45,7 @@
                 <img
                   :src="previewMobile"
                   class="w-1/2 rounded-sm shadow-card"
-                  style="max-width: 208px;max-width: 208px;max-height: 70px;" >
+                  style="max-width: 208px;max-height: 70px;" >
                 <input 
                   @change="changePreview($event)"
                   name="banner_mobile" type="file" class="w-full mt-3 text-tgadgety opacity-80 text-xs sm:text-md">
@@ -127,6 +128,10 @@ export default {
                     this.$emit('show-successicon',true);
                     this.$emit('loading-msg',"upload success!");
                     this.$emit('getbanners');
+                    form[0].value = '';
+                    form[1].value = '';
+                    this.previewDesktop = require('@/assets/img/bg-banner-desktop.webp'),
+                    this.previewMobile  = require('@/assets/img/bg-banner-mobile.webp'),
 
                     setTimeout(() => {
                         this.$emit('loading-on',false);

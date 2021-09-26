@@ -8,7 +8,8 @@
         <transition name="slide" appear>
         <form
           @submit.prevent="doEditEvent($event.target)"
-          class="bg-white w-80 flex flex-col rounded-md text-tgadgety">
+          class="bg-white w-80 flex flex-col rounded-md text-tgadgety"
+          style="">
             
             <!-- header -->
             <div
@@ -90,9 +91,9 @@ export default {
     props: ['apiurl'],
     data() {
         return{
-            dataIsReady : '',
             userdata    : JSON.parse(localStorage.getItem('userdata')),
             poster      : require('@/assets/img/bg-poster.webp'),
+            dataIsReady : '',
             day         : '',
             month       : '',
             year        : '',

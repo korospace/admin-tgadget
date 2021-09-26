@@ -1,10 +1,11 @@
-import Vue          from 'vue'
-import VueRouter    from 'vue-router'
-import Dashboard    from '@/views/Dashboard.vue'
-import Login        from '@/views/Login.vue'
-import Register     from '@/views/Register.vue'
-import AddProduct   from '@/views/AddProduct.vue'
-import PageNotFound from '@/views/PageNotFound.vue'
+import Vue           from 'vue'
+import VueRouter     from 'vue-router'
+import Dashboard     from '@/views/Dashboard.vue'
+import Login         from '@/views/Login.vue'
+import Register      from '@/views/Register.vue'
+import AddProduct    from '@/views/AddProduct.vue'
+import UpdateProduct from '@/views/UpdateProduct.vue'
+import PageNotFound  from '@/views/PageNotFound.vue'
 
 Vue.use(VueRouter)
 
@@ -40,6 +41,14 @@ const routes = [
       title : 'add product'
     },
     component: AddProduct
+  },
+  {
+    path: '/update-product',
+    name: 'UpdateProduct',
+    meta: {
+      title : 'update product'
+    },
+    component: UpdateProduct
   },
   {
     path: '*',

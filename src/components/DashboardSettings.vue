@@ -8,9 +8,14 @@
         
         <PopUpDelete
           v-if="showPopUpDelete"
-          @dodelete="doDeleteAccount()"
-          @close="showPopUpDelete=false"
-          targetdelete="account" />
+          :apiurl="apiurl"
+          :targetdelete="{name:'account'}"
+          @popuphide="showPopUpDelete=false"
+          @alert-on="$emit('alert-on',$event)"
+          @expired-on="$emit('expired-on')"
+          @loading-on="$emit('loading-on',$event)"
+          @loading-msg="$emit('loading-msg',$event)"
+          @show-successicon="$emit('show-successicon',$event)" />
 
         <transition name="slide" appear>
         <div class="bg-white w-96 flex flex-col rounded-md">
@@ -114,7 +119,7 @@
                     </div>
                     <a
                       href=""
-                      class="mt-7 px-3 py-1 border border-tgadgety rounded-sm tracking-widest transition-all text-tgadgety-500 hover:text-tgadgety border-2 border-tgadgety-500 hover:border-tgadgety mr-2" 
+                      class="mt-7 px-3 py-1.5 border border-tgadgety rounded-sm tracking-widest transition-all text-tgadgety-500 hover:text-tgadgety border-2 border-tgadgety-500 hover:border-tgadgety mr-2" 
                       @click.prevent="showPopUpDelete = true">
                         delete account
                     </a>

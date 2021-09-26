@@ -2,11 +2,23 @@
     <div
       id="dashboard-testimonies"
       class="pt-8 px-5">
+        
+        <PopUpDelete
+          v-if="showPopUpDelete"
+          :apiurl="apiurl"
+          :targetdelete="targetDelete"
+          @updatedata="updateTestimonies()"
+          @popuphide="showPopUpDelete=false"
+          @alert-on="$emit('alert-on',$event)"
+          @expired-on="$emit('expired-on')"
+          @loading-on="$emit('loading-on',$event)"
+          @loading-msg="$emit('loading-msg',$event)"
+          @show-successicon="$emit('show-successicon',$event)" />
 
         <PopUpAddTestimonies
           v-if="showPopUpAddTesti"
           :apiurl="apiurl"
-          @gettestimonies="$emit('gettestimonies')"
+          @gettestimonies="getTestimonies()"
           @popuphide="showPopUpAddTesti=false"
           @alert-on="$emit('alert-on',$event)"
           @loading-on="$emit('loading-on',$event)"
@@ -53,7 +65,7 @@
                 <img
                   :src="require('@/assets/img/garbage-w.svg')"
                   class="w-7 p-1.5 absolute bottom-2 left-2 bg-tgadgety hover:bg-tgadgety-500 active:bg-tgadgety-500 rounded-sm cursor-pointer shadow-md" 
-                  @click.prevent="showPopUpDelete({
+                  @click.prevent="funcShowPopUpDelete({
                     id: data.id,
                     name: 'testimony'
                   });" >
@@ -72,23 +84,66 @@
 
 <script>
 import PopUpAddTestimonies from '@/components/PopUpAddTestimonies'
+import PopUpDelete         from '@/components/PopUpDelete'
 
 export default {
-    props:['apiurl','testimonies'],
-    components: {
-      PopUpAddTestimonies,
+  props:['apiurl'],
+  components: {
+    PopUpAddTestimonies,
+    PopUpDelete,
+  },
+  data() {
+    return{
+      testimonies: [],
+      showPopUpAddTesti: false,
+      showPopUpDelete  : false,
+      targetDelete     : '',
+      userdata         : JSON.parse(localStorage.getItem('userdata')),
+    }
+  },
+  methods: {
+    getTestimonies(){
+      this.testimonies = [];
+
+      this.axios
+          .get(`${this.$props.apiurl}/get/testimonies`, {
+            headers: {
+              'api-key': this.userdata.api_key,
+          }
+          })
+          .then((response) => {
+              if(response.status == 200){
+                this.testimonies = response.data.data;
+              }
+          })
+          .catch((error) => {
+              // Product not found
+              if(error.response.status == 404){
+                this.testimonies = "notfound";
+              }
+              // Server error
+              if(error.response.status == 500){
+                this.showAlert({
+                  type: 'danger',
+                  msg: '<b>Ups, server bussy!</b> Please refresh page.'
+                });
+              }
+          })
     },
-    data() {
-      return{
-        showPopUpAddTesti: false,
+    updateTestimonies(){
+      this.testimonies = this.testimonies.filter(e => e.id != this.targetDelete.id); 
+      if (this.testimonies.length == 0) {
+        this.testimonies = 'notfound';
       }
     },
-    methods: {
-      showPopUpDelete(data){
-        this.$emit('showpopupdelete');
-        this.$emit('changetargetdelete',data);
-      }
-    },
+    funcShowPopUpDelete(data){
+      this.showPopUpDelete = true;
+      this.targetDelete    = data;
+    }
+  },
+  mounted(){
+    this.getTestimonies();
+  },
 }
 </script>
 

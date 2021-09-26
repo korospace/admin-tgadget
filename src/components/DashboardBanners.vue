@@ -2,12 +2,24 @@
     <div
       id="dashboard-banners"
       class="pt-8 px-5">
+        
+        <PopUpDelete
+          v-if="showPopUpDelete"
+          :apiurl="apiurl"
+          :targetdelete="targetDelete"
+          @updatedata="updateBanners()"
+          @popuphide="showPopUpDelete=false"
+          @alert-on="$emit('alert-on',$event)"
+          @expired-on="$emit('expired-on')"
+          @loading-on="$emit('loading-on',$event)"
+          @loading-msg="$emit('loading-msg',$event)"
+          @show-successicon="$emit('show-successicon',$event)" />
 
         <PopUpAddBanners
-          v-if="showPopUpAddBanners"
+          v-if="showPopUpAddBanner"
           :apiurl="apiurl"
-          @getbanners="$emit('getbanners')"
-          @popuphide="showPopUpAddBanners=false"
+          @getbanners="getBanners()"
+          @popuphide="showPopUpAddBanner=false"
           @alert-on="$emit('alert-on',$event)"
           @loading-on="$emit('loading-on',$event)"
           @loading-msg="$emit('loading-msg',$event)"
@@ -74,7 +86,7 @@
                 <img
                   :src="require('@/assets/img/garbage-w.svg')"
                   class="w-7 p-1.5 absolute bottom-2 left-2 bg-tgadgety hover:bg-tgadgety-500 active:bg-tgadgety-500 rounded-sm cursor-pointer shadow-md" 
-                  @click="showPopUpDelete({
+                  @click="funcShowPopUpDelete({
                     id: data.id,
                     name: 'banner'
                   });" >
@@ -85,7 +97,7 @@
         <button 
           class="w-full flex justify-center mt-2 px-3 py-2 rounded-md shadow-card tracking-widest transition-all text-white text-md sm-400:text-xl uppercase bg-tgadgety hover:bg-tgadgety-500"
           style="font-family: 'Quicksand-SemiBold';"
-          @click.prevent="showPopUpAddBanners=true">
+          @click.prevent="showPopUpAddBanner=true">
             add banner
         </button>
     </div>
@@ -93,24 +105,67 @@
 
 <script>
 import PopUpAddBanners from '@/components/PopUpAddBanners'
+import PopUpDelete     from '@/components/PopUpDelete'
 
 export default {
-    props:['apiurl','banners'],
-    components: {
-      PopUpAddBanners,
+  props:['apiurl'],
+  components: {
+    PopUpAddBanners,
+    PopUpDelete,
+  },
+  data() {
+    return{
+      mode               : 'desktop',
+      banners            : [],
+      showPopUpAddBanner : false,
+      showPopUpDelete    : false,
+      targetDelete       : '',
+      userdata           : JSON.parse(localStorage.getItem('userdata')),
+    }
+  },
+  methods: {
+    getBanners(){
+      this.banners = [];
+
+      this.axios
+        .get(`${this.$props.apiurl}/get/banners`, {
+          headers: {
+            'api-key': this.userdata.api_key,
+          }
+        })
+        .then((response) => {
+          if(response.status == 200){
+            this.banners = response.data.data;
+          }
+        })
+        .catch((error) => {
+          // Product not found
+          if(error.response.status == 404){
+            this.banners = "notfound";
+          }
+          // Server error
+          if(error.response.status == 500){
+            this.showAlert({
+              type: 'danger',
+              msg: '<b>Ups, server bussy!</b> Please refresh page.'
+            });
+          }
+        })
     },
-    data() {
-      return{
-        mode   : 'desktop',
-        showPopUpAddBanners: false,
+    updateBanners(){
+      this.banners = this.banners.filter(e => e.id != this.targetDelete.id); 
+      if (this.banners.length == 0) {
+        this.banners = 'notfound';
       }
     },
-    methods: {
-      showPopUpDelete(data){
-        this.$emit('showpopupdelete');
-        this.$emit('changetargetdelete',data);
-      }
-    },
+    funcShowPopUpDelete(data){
+      this.showPopUpDelete = true;
+      this.targetDelete    = data;
+    }
+  },
+  mounted(){
+    this.getBanners();
+  },
 }
 </script>
 
