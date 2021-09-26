@@ -48,9 +48,9 @@
               class="w-full flex flex-col sm:flex-row mb-4 rounded-md shadow-md overflow-x-auto"
               :class="{'hidden':allProducts=='notfound'}"
               style="background-color: rgba(255,255,255,0.49);">
-                <div class="flex-1 flex flex-col sm-400:flex-row sm-400:pl-4 sm:pl-0  sm-400:pt-4 sm:pt-0">
+                <div class="flex-1 flex flex-col sm-400:flex-row sm-400:pl-4 sm:pl-2 sm-400:pt-4 sm:pt-2 pb-2">
                     <div
-                      class="relative bg-white w-full sm-400:w-44 lg:w-56 rounded-tl-md rounded-tr-md sm-400:rounded-tr-none overflow-hidden">
+                      class="relative w-full sm-400:w-44 lg:w-56 rounded-tl-md rounded-tr-md sm-400:rounded-tr-none rounded-tr-none sm-400:rounded-bl-md overflow-hidden">
                         <img 
                           :src="require('@/assets/img/bg-img-product.webp')"
                           class="w-full w-full h-full top-0 bottom-0">

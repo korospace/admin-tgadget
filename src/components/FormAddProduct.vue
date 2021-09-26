@@ -321,7 +321,7 @@ export default {
       deskripsiValue   : "",
       customToolbar: [
         ["bold", "italic", "underline"],
-        [{ list: "ordered" }, { list: "bullet" }],
+        [],
       ]
     }
   },

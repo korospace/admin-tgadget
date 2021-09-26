@@ -332,7 +332,7 @@ export default {
       isNameExist      : "",
       customToolbar: [
         ["bold", "italic", "underline"],
-        [{ list: "ordered" }, { list: "bullet" }],
+        [],
       ]
     }
   },
@@ -456,8 +456,8 @@ export default {
       let oldCategories = this.categories;
       this.categories   = this.categories.filter(e => e.category_name != data.category_name);
 
-      if (this.categoryValue == data.category_name) {
-        this.categoryValue = '';
+      if (this.kategori == data.category_name) {
+        this.kategori = '';
       }
       if (this.categories.length == 0) {
         this.categories = 'notfound';
