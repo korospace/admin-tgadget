@@ -100,7 +100,7 @@
                   style="border-left: 0px solid rgba(241, 141, 67, 0.4)">
                     <div 
                       class="bg-tgadgety w-full flex-1 py-2 px-4 text-white rounded-sm overflow-y-auto overflow-x-hidden opacity-80"
-                      style="max-height: 142px;">
+                      style="">
                         <span 
                           v-html="data.deskripsi"
                           class="text-sm lg-930:text-base opacity-80"
