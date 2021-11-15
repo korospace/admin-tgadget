@@ -1,4 +1,5 @@
 .DS_Store
+firebase-deploy
 node_modules
 /dist
 

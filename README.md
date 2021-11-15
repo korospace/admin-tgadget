@@ -11,3 +11,9 @@ Live Demo Can access at <a href="https://t-gadgetadmin.netlify.app/">https://t-g
 > <img src="src/assets/screenshoot/desktop2.webp" width="860px" /><br><br>
 
 > <img src="src/assets/screenshoot/desktop1.webp" width="860px" /><br><br>
+
+> <img src="src/assets/screenshoot/setting.webp" width="860px" /><br><br>
+
+> <img src="src/assets/screenshoot/event.webp" width="860px" /><br><br>
+
+> <img src="src/assets/screenshoot/mobile-group.webp" width="860px" /><br><br>

@@ -286,7 +286,7 @@ export default {
           }
         })
         .then(() => {
-          
+          this.getDataStatistics();
         })
         .catch((error) => {
           this.getDataStatistics();
