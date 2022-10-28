@@ -6,7 +6,7 @@ This is a website that I created as GUI for manage my rest API at <a href="https
 - [x] Tailwind
 
 ## 2. Preview
-Live Demo Can access at <a href="https://t-gadgetadmin.netlify.app/">https://t-gadgetadmin.netlify.app/</a> <br><br>
+Live Demo Can access at <a href="https://admin-tgadget.web.app/">https://admin-tgadget.web.app/</a> <br><br>
 
 > <img src="src/assets/screenshoot/desktop2.webp" width="860px" /><br><br>
 
