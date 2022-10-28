@@ -46,7 +46,7 @@
               
               <DashboardVisitors
                 :apiurl="apiurl"
-                :totalproducts="productViewrs.length"
+                :totalproducts="productViewrs == 'notfound' ? 0 : productViewrs.length"
                 @alert-on="showAlert($event)"
                 @alert-off="alertOn=false"
                 @expired-on="popUpExpiredOn=true" />

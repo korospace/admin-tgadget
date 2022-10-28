@@ -190,7 +190,7 @@ export default {
                     this.allProducts = "notfound";
                 }
             }
-            
+
             this.allProducts2 = this.allProducts;
             this.$emit('productsviewers',this.allProducts);
         },
