@@ -12,7 +12,8 @@
 export default {
   data() {
     return{
-      apiUrl: 'https://koro-corsanywhere.up.railway.app/https://api-tgadget.up.railway.app'
+      // apiUrl: 'https://cors-get-proxy.sirjosh.workers.dev/?url=https://apitgadget.000webhostapp.com',
+      apiUrl: 'http://localhost/api-tgadget',
       }
   },
   methods: {
